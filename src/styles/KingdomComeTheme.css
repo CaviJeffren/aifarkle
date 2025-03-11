@@ -1,0 +1,1012 @@
+/* 天国拯救主题 - Kingdom Come: Deliverance风格 */
+:root {
+  /* 羊皮纸色调 */
+  --kcd-parchment-light: #f4e4bc;
+  --kcd-parchment: #e8dcc0;
+  --kcd-parchment-dark: #d5c5a5;
+  
+  /* 木质色调 - 深棕色做旧效果 */
+  --kcd-wood-dark: #2c1810;
+  --kcd-wood-medium: #3a2218;
+  --kcd-wood-light: #4a2d20;
+  
+  /* 装饰色调 */
+  --kcd-gold: #c9a959;
+  --kcd-gold-dark: #a88a3c;
+  --kcd-red: #8e2c20;
+  --kcd-black: #1a1610;
+  
+  /* 阴影和边框 */
+  --kcd-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  --kcd-inner-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+  --kcd-border-decoration: 12px solid transparent;
+  
+  /* 字体 */
+  --kcd-font-main: 'Cinzel', serif;
+  --kcd-font-secondary: 'Merriweather', serif;
+}
+
+/* 背景样式 - 做旧纯色 */
+body {
+  background-color: var(--kcd-wood-dark);
+  background-image: 
+    radial-gradient(circle at center, var(--kcd-wood-medium) 0%, var(--kcd-wood-dark) 100%);
+  color: var(--kcd-black);
+  font-family: var(--kcd-font-main);
+  letter-spacing: 0.5px;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 主容器 */
+.game-container {
+  max-width: 800px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 40px);
+  margin: 0 auto;
+  background: linear-gradient(to bottom, 
+    var(--kcd-wood-medium) 0%,
+    var(--kcd-wood-dark) 100%);
+  position: relative;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+  border: 3px solid var(--kcd-wood-light);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.game-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 游戏标题区域 */
+.header {
+  text-align: center;
+  margin: -30px -30px 20px -30px;
+  position: relative;
+  background-color: var(--kcd-parchment);
+  padding: 15px 25px;
+  border-bottom: 3px solid var(--kcd-wood-light);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.header-controls {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.header h1 {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-main);
+  text-transform: uppercase;
+  font-size: 2rem;
+  margin: 0;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+}
+
+.header-button {
+  background: none;
+  border: none;
+  color: var(--kcd-gold-dark);
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.header-button:hover {
+  color: var(--kcd-gold);
+  background-color: rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 按钮样式优化 */
+.kcd-button {
+  background-color: var(--kcd-parchment);
+  color: var(--kcd-wood-dark);
+  border: 2px solid var(--kcd-wood-light);
+  font-family: var(--kcd-font-main);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.kcd-button:hover {
+  background-color: var(--kcd-gold);
+  color: var(--kcd-wood-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 主要内容区域 */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 20px;
+  padding: 0 10px;
+}
+
+
+/* 骰子容器 - 自适应布局 */
+.dice-container {
+  background: linear-gradient(to bottom, 
+    var(--kcd-wood-medium) 0%,
+    var(--kcd-wood-dark) 100%);
+  border: 2px solid var(--kcd-wood-light);
+  border-radius: 10px;
+  box-shadow: var(--kcd-inner-shadow), 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  margin: 15px auto;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(2, auto);
+  justify-content: center;
+  align-content: center;
+  gap: 30px;
+  min-height: 250px;
+  max-width: 800px;
+  position: relative;
+}
+
+.dice-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+/* 骰子样式 */
+.die {
+  width: 80px;
+  height: 80px;
+  background-color: #f5e6c3;  /* 更浅的米色 */
+  border: 3px solid var(--kcd-wood-light);
+  border-radius: 8px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  background-image: 
+    linear-gradient(45deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+}
+
+.die::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%, rgba(0,0,0,0.1) 100%),
+    linear-gradient(45deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+  border-radius: 5px;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.die::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+.die-face {
+  font-size: 3.5rem;
+  color: var(--kcd-parchment);
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.6);
+  font-weight: bold;
+}
+
+.die:hover:not(.locked):not(.disabled) {
+  transform: translateY(-8px) rotateZ(5deg);
+  box-shadow: 6px 8px 12px rgba(0, 0, 0, 0.5);
+}
+
+.die.selected {
+  background-color: #e5c992;  /* 更浅的金色 */
+  border-color: var(--kcd-gold-dark);
+  transform: translateY(-8px);
+  box-shadow: 0 0 15px var(--kcd-gold), 6px 8px 12px rgba(0, 0, 0, 0.5);
+}
+
+.die.locked {
+  background-color: #a83232;  /* 更鲜艳的红色 */
+  border-color: #2a0f0f;
+  cursor: not-allowed;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  opacity: 0.95;
+}
+
+/* 骰子点数样式 */
+.die-dots {
+  width: 85%;
+  height: 85%;
+  display: grid;
+  grid-template-areas:
+    "tl . tr"
+    "ml mc mr"
+    "bl . br";
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 10px;
+  position: relative;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  background-color: #1a0f0a;  /* 更深的褐色 */
+  border-radius: 50%;
+  box-shadow: 
+    inset 0 0 4px rgba(0, 0, 0, 0.8),
+    0 1px 2px rgba(255, 255, 255, 0.3);
+  align-self: center;
+  justify-self: center;
+  position: relative;
+}
+
+.dot::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.dot.top-left {
+  grid-area: tl;
+}
+
+.dot.top-right {
+  grid-area: tr;
+}
+
+.dot.middle-left {
+  grid-area: ml;
+}
+
+.dot.middle-right {
+  grid-area: mr;
+}
+
+.dot.center {
+  grid-area: mc;
+}
+
+.dot.bottom-left {
+  grid-area: bl;
+}
+
+.dot.bottom-right {
+  grid-area: br;
+}
+
+/* 分数区域 */
+.score-board {
+  background-color: var(--kcd-parchment);
+  border: 2px solid var(--kcd-wood-light);
+  border-radius: 8px;
+  box-shadow: var(--kcd-box-shadow);
+  padding: 20px;
+  margin: 20px 0;
+  position: relative;
+}
+
+.score-board::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.score-board h2 {
+  text-align: center;
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-main);
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 2px solid var(--kcd-wood-light);
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.score-board h2::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background-color: var(--kcd-gold);
+}
+
+.player-score {
+  background-color: rgba(82, 55, 38, 0.1);
+  border: 1px solid var(--kcd-wood-light);
+  color: var(--kcd-wood-dark);
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--kcd-font-secondary);
+}
+
+.player-score.current {
+  background-color: rgba(201, 169, 89, 0.2);
+  border-color: var(--kcd-gold);
+  border-left: 5px solid var(--kcd-gold);
+}
+
+.player-name {
+  font-weight: bold;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--kcd-wood-dark);
+}
+
+.current-indicator {
+  background-color: var(--kcd-gold);
+  color: var(--kcd-wood-dark);
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: var(--kcd-font-main);
+}
+
+.score {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--kcd-wood-dark);
+}
+
+.turn-score {
+  background-color: rgba(82, 55, 38, 0.1);
+  color: var(--kcd-wood-dark);
+  border: 1px solid var(--kcd-gold);
+  padding: 10px;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+  font-family: var(--kcd-font-secondary);
+}
+
+.turn-score span {
+  color: var(--kcd-wood-dark);
+  font-size: 1.2rem;
+}
+
+/* 游戏消息 */
+.game-message {
+  margin: 15px 0;
+}
+
+.game-message .alert {
+  background-color: var(--kcd-parchment);
+  color: var(--kcd-wood-dark);
+  border: 2px solid var(--kcd-wood-light);
+  border-radius: 5px;
+  box-shadow: var(--kcd-box-shadow), var(--kcd-inner-shadow);
+  text-align: center;
+  font-weight: bold;
+  padding: 12px;
+  font-family: var(--kcd-font-secondary);
+  position: relative;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    transparent 25%,
+    transparent 75%,
+    rgba(255, 255, 255, 0.05) 75%,
+    rgba(255, 255, 255, 0.05)
+  );
+  background-size: 20px 20px;
+}
+
+/* 得分显示区域 */
+.score-display {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 15px 0;
+  padding: 15px;
+  background-color: var(--kcd-parchment);
+  border: 2px solid var(--kcd-wood-light);
+  border-radius: 8px;
+  box-shadow: var(--kcd-box-shadow);
+  position: relative;
+}
+
+.score-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.score-item {
+  flex: 1;
+  max-width: 200px;
+  text-align: center;
+  padding: 10px 20px;
+  background-color: rgba(82, 55, 38, 0.1);
+  border: 1px solid var(--kcd-gold);
+  border-radius: 5px;
+  position: relative;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.score-item::before,
+.score-item::after {
+  content: '❧';
+  color: var(--kcd-gold);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+}
+
+.score-item::before {
+  left: 8px;
+}
+
+.score-item::after {
+  right: 8px;
+}
+
+.score-label {
+  display: block;
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-main);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.score-value {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* 游戏控制区域 */
+.game-controls {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.selection-controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selection-score {
+  background-color: rgba(201, 169, 89, 0.2);
+  color: var(--kcd-wood-dark);
+  padding: 8px 20px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  border: 1px solid var(--kcd-gold);
+  font-family: var(--kcd-font-secondary);
+  position: relative;
+}
+
+.selection-score::before,
+.selection-score::after {
+  content: '•';
+  color: var(--kcd-gold);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+}
+
+.selection-score::before {
+  left: 8px;
+}
+
+.selection-score::after {
+  right: 8px;
+}
+
+.buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 模态框样式 */
+.kcd-modal .modal-content {
+  background-color: var(--kcd-parchment);
+  border: 2px solid var(--kcd-wood-light);
+  border-radius: 5px;
+  box-shadow: var(--kcd-box-shadow), var(--kcd-inner-shadow);
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    transparent 25%,
+    transparent 75%,
+    rgba(255, 255, 255, 0.05) 75%,
+    rgba(255, 255, 255, 0.05)
+  );
+  background-size: 20px 20px;
+}
+
+.kcd-modal .modal-content::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border: 1px solid rgba(82, 55, 38, 0.2);
+  pointer-events: none;
+}
+
+.kcd-modal .modal-header {
+  border-bottom: 2px solid var(--kcd-wood-light);
+  background-color: rgba(82, 55, 38, 0.1);
+  padding: 15px 20px;
+  position: relative;
+}
+
+.kcd-modal .modal-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--kcd-gold), transparent);
+}
+
+.kcd-modal .modal-title {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-main);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 1.5rem;
+  text-align: center;
+  width: 100%;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.kcd-modal .modal-body {
+  padding: 20px;
+  font-family: var(--kcd-font-secondary);
+  color: var(--kcd-wood-dark);
+  line-height: 1.6;
+  position: relative;
+}
+
+.kcd-modal .modal-body h4 {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-main);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 20px 0 10px;
+  font-size: 1.2rem;
+  border-bottom: 1px solid var(--kcd-gold);
+  padding-bottom: 5px;
+  display: inline-block;
+}
+
+.kcd-modal .modal-body h4:first-child {
+  margin-top: 0;
+}
+
+.kcd-modal .modal-body p {
+  margin-bottom: 15px;
+}
+
+.kcd-modal .modal-body ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 20px;
+}
+
+.kcd-modal .modal-body ul li {
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(82, 55, 38, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kcd-modal .modal-body ul li:last-child {
+  border-bottom: none;
+}
+
+.kcd-modal .modal-footer {
+  border-top: 2px solid var(--kcd-wood-light);
+  background-color: rgba(82, 55, 38, 0.1);
+  padding: 15px 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.kcd-modal .modal-footer::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--kcd-gold), transparent);
+}
+
+/* 响应式设计优化 */
+@media (max-width: 576px) {
+  body {
+    padding: 10px;
+  }
+
+  .game-container {
+    padding: 15px;
+  }
+
+  .header {
+    margin: -15px -15px 15px -15px;
+    padding: 10px 15px;
+  }
+
+  .dice-container {
+    padding: 15px;
+    gap: 15px;
+    min-height: 200px;
+  }
+
+  .die {
+    width: 65px;
+    height: 65px;
+    min-width: 65px;
+    min-height: 65px;
+  }
+
+  .game-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .kcd-button {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .die-face {
+    font-size: 3rem;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+  }
+  
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .buttons button {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  .die-dots {
+    width: 90%;
+    height: 90%;
+    padding: 6px;
+  }
+  
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .kcd-modal .modal-title {
+    font-size: 1.3rem;
+  }
+  
+  .kcd-modal .modal-body {
+    padding: 15px;
+  }
+  
+  .kcd-modal .modal-body h4 {
+    font-size: 1.1rem;
+  }
+
+  .header-button {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+  }
+
+  .header-controls {
+    right: 10px;
+    gap: 8px;
+  }
+
+  .score-display {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .score-item {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .dice-container {
+    padding: 12px;
+    gap: 12px;
+    min-height: 180px;
+  }
+
+  .die {
+    width: 55px;
+    height: 55px;
+    min-width: 55px;
+    min-height: 55px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .header h1 {
+    font-size: 1.3rem;
+  }
+
+  .header-button {
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dice-container {
+    min-height: 280px;
+    padding: 30px;
+    gap: 25px;
+    max-width: 700px;
+  }
+
+  .die {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    min-height: 80px;
+  }
+
+  .dot {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dice-container {
+    min-height: 220px;
+    padding: 20px;
+    gap: 20px;
+    max-width: 550px;
+  }
+
+  .die {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    min-height: 70px;
+  }
+
+  .dot {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .dice-container {
+    min-height: 180px;
+    padding: 15px;
+    gap: 15px;
+    max-width: 400px;
+  }
+
+  .die {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    min-height: 60px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* 分数区域高亮样式 */
+.score-item.current-turn {
+  background-color: rgba(201, 169, 89, 0.3);
+  border: 2px solid var(--kcd-gold);
+  box-shadow: 0 0 10px var(--kcd-gold);
+  padding: 9px 19px; /* 减少1px以补偿边框增加的1px */
+}
+
+/* 弹窗样式 */
+.game-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--kcd-parchment);
+  border: 3px solid var(--kcd-wood-light);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--kcd-box-shadow);
+  z-index: 1000;
+  text-align: center;
+  min-width: 280px;
+  max-width: 90%;
+}
+
+.game-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+}
+
+.game-modal-title {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-main);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.game-modal-content {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.game-modal-button {
+  background-color: var(--kcd-gold);
+  color: var(--kcd-wood-dark);
+  border: 2px solid var(--kcd-wood-light);
+  padding: 8px 20px;
+  font-family: var(--kcd-font-main);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.game-modal-button:hover {
+  background-color: var(--kcd-gold-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 576px) {
+  .game-modal {
+    padding: 15px;
+    min-width: 250px;
+  }
+  
+  .game-modal-title {
+    font-size: 1.3rem;
+  }
+  
+  .game-modal-content {
+    font-size: 1rem;
+  }
+} 

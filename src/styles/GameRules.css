@@ -1,0 +1,144 @@
+.rules-button {
+  margin-left: 10px;
+}
+
+.medieval-modal .modal-content {
+  background-color: var(--parchment);
+  border: var(--border-decoration);
+  border-radius: 0;
+}
+
+.medieval-modal .modal-header {
+  border-bottom: 2px solid var(--medium-brown);
+  background-color: var(--medium-brown);
+  color: var(--parchment);
+}
+
+.medieval-modal .modal-title {
+  font-family: 'MedievalSharp', 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+}
+
+.medieval-modal .modal-footer {
+  border-top: 2px solid var(--medium-brown);
+  background-color: var(--light-brown);
+}
+
+.medieval-modal .close {
+  color: var(--parchment);
+}
+
+.rules-content {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 15px;
+  font-family: var(--kcd-font-secondary);
+  color: var(--kcd-dark-brown);
+}
+
+.rules-content h4 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  color: var(--kcd-dark-brown);
+  font-family: var(--kcd-font-main);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--kcd-medium-brown);
+  padding-bottom: 5px;
+  position: relative;
+}
+
+.rules-content h4::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background-color: var(--kcd-gold);
+}
+
+.rules-content p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.rules-content ul {
+  padding-left: 20px;
+  margin-bottom: 15px;
+}
+
+.rules-content ol {
+  padding-left: 20px;
+  margin-bottom: 15px;
+  counter-reset: item;
+}
+
+.rules-content ol > li {
+  margin-bottom: 10px;
+  position: relative;
+  list-style-type: none;
+  counter-increment: item;
+}
+
+.rules-content ol > li::before {
+  content: counter(item) ".";
+  position: absolute;
+  left: -20px;
+  color: var(--kcd-gold);
+  font-weight: bold;
+}
+
+.rules-content li {
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.rules-content ul > li {
+  list-style-type: none;
+  position: relative;
+  padding-left: 20px;
+}
+
+.rules-content ul > li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--kcd-gold);
+  font-size: 1.2rem;
+}
+
+.scoring-rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.scoring-rules li {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(156, 122, 84, 0.1);
+  padding: 8px 12px;
+  border: 1px solid var(--kcd-medium-brown);
+  margin-bottom: 5px;
+}
+
+.rule-value {
+  font-weight: bold;
+  color: var(--kcd-dark-brown);
+}
+
+.rule-score {
+  color: var(--kcd-gold);
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .scoring-rules {
+    grid-template-columns: 1fr;
+  }
+} 

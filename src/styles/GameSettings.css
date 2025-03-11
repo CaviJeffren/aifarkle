@@ -1,0 +1,100 @@
+.settings-button {
+  margin-right: 10px;
+}
+
+.medieval-input {
+  background-color: var(--parchment) !important;
+  border: 2px solid var(--medium-brown) !important;
+  border-radius: 0 !important;
+  color: var(--dark-brown) !important;
+  font-family: 'Cinzel', serif !important;
+}
+
+.medieval-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(141, 110, 99, 0.25) !important;
+  border-color: var(--medium-brown) !important;
+}
+
+.form-label {
+  color: var(--dark-brown);
+  font-family: 'Cinzel', serif;
+  font-weight: bold;
+}
+
+.kcd-form-label {
+  color: var(--kcd-dark-brown);
+  font-family: var(--kcd-font-main);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  position: relative;
+  display: inline-block;
+}
+
+.kcd-form-label::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background-color: var(--kcd-gold);
+}
+
+.kcd-input-container {
+  position: relative;
+}
+
+.kcd-input-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid var(--kcd-medium-brown);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.kcd-input {
+  background-color: var(--kcd-parchment) !important;
+  border: 2px solid var(--kcd-medium-brown) !important;
+  border-radius: 0 !important;
+  color: var(--kcd-dark-brown) !important;
+  font-family: var(--kcd-font-secondary) !important;
+  padding: 10px 15px !important;
+  position: relative;
+  background-image: url('https://www.transparenttextures.com/patterns/parchment.png') !important;
+}
+
+.kcd-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(201, 169, 89, 0.25) !important;
+  border-color: var(--kcd-gold) !important;
+}
+
+.kcd-button-primary {
+  background-color: var(--kcd-gold) !important;
+  color: var(--kcd-dark-brown) !important;
+  border-color: var(--kcd-dark-brown) !important;
+  font-weight: bold !important;
+}
+
+.kcd-modal .modal-content {
+  background-color: var(--kcd-parchment) !important;
+  border: 2px solid var(--kcd-wood-light) !important;
+  border-radius: 5px !important;
+  box-shadow: var(--kcd-box-shadow), var(--kcd-inner-shadow) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    transparent 25%,
+    transparent 75%,
+    rgba(255, 255, 255, 0.05) 75%,
+    rgba(255, 255, 255, 0.05)
+  ) !important;
+  background-size: 20px 20px !important;
+} 

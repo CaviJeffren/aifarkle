@@ -1,0 +1,84 @@
+/* 骰子选择器样式 */
+.dice-selector-body {
+  font-size: 0.9rem;
+}
+
+.dice-selector-body h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.dice-position-btn {
+  padding: 0.5rem 0.25rem;
+}
+
+.dice-name {
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.dice-type-list .list-group-item {
+  padding: 0.5rem 0.75rem;
+}
+
+.dice-type-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.dice-type-desc {
+  font-size: 0.75rem;
+  display: block;
+  color: #666;
+}
+
+/* 选中状态下的骰子说明字体颜色 */
+.list-group-item.active .dice-type-desc {
+  color: #000 !important;
+}
+
+.dice-count {
+  font-size: 0.75rem;
+  min-width: 60px;
+  text-align: right;
+}
+
+/* 选中状态下的已用数量字体颜色 */
+.list-group-item.active .dice-count .text-muted {
+  color: #000 !important;
+}
+
+.dice-sell-list .list-group-item {
+  padding: 0.5rem 0.75rem;
+}
+
+.dice-sell-item small {
+  font-size: 0.75rem;
+}
+
+/* 响应式调整 */
+@media (max-width: 576px) {
+  .dice-selector-body {
+    font-size: 0.85rem;
+  }
+  
+  .dice-position-btn {
+    padding: 0.4rem 0.2rem;
+  }
+  
+  .dice-name {
+    font-size: 0.7rem;
+  }
+  
+  .dice-type-name {
+    font-size: 0.8rem;
+  }
+  
+  .dice-type-desc {
+    font-size: 0.7rem;
+  }
+} 

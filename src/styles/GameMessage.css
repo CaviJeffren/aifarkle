@@ -1,0 +1,8 @@
+.game-message {
+  margin: 20px 0;
+}
+
+.game-message .alert {
+  text-align: center;
+  font-weight: 500;
+} 

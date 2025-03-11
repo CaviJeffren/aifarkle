@@ -1,0 +1,67 @@
+.betting-panel {
+  background-color: var(--kcd-parchment);
+  border: 2px solid var(--kcd-wood-light);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--kcd-box-shadow);
+  text-align: center;
+}
+
+.betting-panel h3 {
+  color: var(--kcd-red);
+  font-family: var(--kcd-font-main);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.betting-panel p {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.betting-panel .form-label {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  font-weight: bold;
+}
+
+.kcd-range {
+  height: 8px;
+  border-radius: 4px;
+  background-color: var(--kcd-wood-light);
+}
+
+.kcd-range::-webkit-slider-thumb {
+  background-color: var(--kcd-red);
+  border: 2px solid var(--kcd-wood-dark);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.kcd-input {
+  background-color: var(--kcd-parchment-light);
+  border: 1px solid var(--kcd-wood-light);
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  text-align: center;
+}
+
+@media (max-width: 576px) {
+  .betting-panel {
+    padding: 15px;
+  }
+  
+  .betting-panel h3 {
+    font-size: 1.3rem;
+  }
+  
+  .betting-panel p {
+    font-size: 1rem;
+  }
+} 

@@ -1,0 +1,269 @@
+/* 中世纪复古主题 */
+:root {
+  --parchment: #f2e8c9;
+  --dark-brown: #5d4037;
+  --medium-brown: #8d6e63;
+  --light-brown: #a1887f;
+  --gold: #d4af37;
+  --red: #b71c1c;
+  --black: #212121;
+  --border-decoration: 8px double var(--dark-brown);
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --medieval-wood-dark: #33221f;
+  --medieval-text: #f2e8c9;
+  --medieval-font-main: 'Cinzel', serif;
+}
+
+body {
+  background-color: var(--medieval-wood-dark);
+  background-image: 
+    linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.1)),
+    linear-gradient(-45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.1));
+  background-size: 60px 60px;
+  color: var(--medieval-text);
+  font-family: var(--medieval-font-main);
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+.game-container {
+  max-width: 600px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.header h1 {
+  color: var(--gold);
+  font-family: 'MedievalSharp', 'Cinzel', serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.header-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.btn-medieval {
+  background-color: var(--medium-brown);
+  color: var(--parchment);
+  border: 2px solid var(--gold);
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+.btn-medieval:hover {
+  background-color: var(--gold);
+  color: var(--dark-brown);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn-medieval:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dice-container {
+  background-color: var(--parchment);
+  border: var(--border-decoration);
+  border-radius: 0;
+  box-shadow: var(--box-shadow);
+  padding: 15px;
+  margin: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 100px;
+}
+
+.die {
+  width: 60px;
+  height: 60px;
+  margin: 8px;
+  background-color: var(--light-brown);
+  border: 2px solid var(--dark-brown);
+  border-radius: 5px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.die-face {
+  font-size: 2.2rem;
+  color: var(--parchment);
+}
+
+.die.selected {
+  background-color: var(--gold);
+  transform: translateY(-5px);
+  box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.4);
+}
+
+.die.locked {
+  background-color: var(--red);
+  border-color: var(--black);
+}
+
+.score-board {
+  background-color: var(--parchment);
+  border: var(--border-decoration);
+  border-radius: 0;
+  box-shadow: var(--box-shadow);
+  padding: 15px;
+  margin: 10px 0;
+}
+
+.score-board h2 {
+  text-align: center;
+  color: var(--dark-brown);
+  font-family: 'MedievalSharp', 'Cinzel', serif;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--medium-brown);
+  padding-bottom: 5px;
+}
+
+.player-score {
+  background-color: var(--light-brown);
+  border: 2px solid var(--medium-brown);
+  color: var(--parchment);
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.player-score.current {
+  background-color: var(--medium-brown);
+  border-color: var(--gold);
+  border-left: 5px solid var(--gold);
+}
+
+.player-name {
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.current-indicator {
+  background-color: var(--gold);
+  color: var(--dark-brown);
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 0;
+  margin-left: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.score {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--gold);
+}
+
+.turn-score {
+  background-color: var(--medium-brown);
+  color: var(--parchment);
+  border: 2px solid var(--gold);
+  padding: 8px;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.turn-score span {
+  color: var(--gold);
+  font-size: 1.2rem;
+}
+
+.game-message {
+  margin: 10px 0;
+}
+
+.game-message .alert {
+  background-color: var(--parchment);
+  color: var(--dark-brown);
+  border: 2px solid var(--medium-brown);
+  border-radius: 0;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.game-controls {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.selection-controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selection-score {
+  background-color: var(--gold);
+  color: var(--dark-brown);
+  padding: 5px 15px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  border: 2px solid var(--dark-brown);
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* 响应式设计 */
+@media (max-width: 576px) {
+  .die {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+  }
+  
+  .die-face {
+    font-size: 1.8rem;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .buttons button {
+    margin-bottom: 8px;
+  }
+} 

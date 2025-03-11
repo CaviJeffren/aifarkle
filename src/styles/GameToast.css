@@ -1,0 +1,69 @@
+.game-toast {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  animation: fadeInOut 2s ease-in-out;
+  pointer-events: none;
+}
+
+.game-toast-content {
+  background-color: var(--kcd-parchment);
+  border: 2px solid var(--kcd-wood-light);
+  border-radius: 8px;
+  padding: 15px 25px;
+  text-align: center;
+  box-shadow: var(--kcd-box-shadow);
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.game-toast-content h3 {
+  color: var(--kcd-red);
+  font-family: var(--kcd-font-main);
+  font-size: 1.5rem;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.game-toast-content p {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  margin: 0;
+  font-size: 1rem;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .game-toast-content {
+    padding: 12px 20px;
+  }
+  
+  .game-toast-content h3 {
+    font-size: 1.3rem;
+  }
+  
+  .game-toast-content p {
+    font-size: 0.9rem;
+  }
+} 

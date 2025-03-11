@@ -1,0 +1,107 @@
+.mini-die {
+  width: 42px;
+  height: 42px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: all 0.15s ease-out;
+  position: relative;
+  user-select: none;
+}
+
+.mini-die-dots {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.mini-dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background-color: #333;
+  border-radius: 50%;
+}
+
+/* 点数位置 */
+.mini-dot.center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mini-dot.top-left {
+  top: 20%;
+  left: 20%;
+}
+
+.mini-dot.top-right {
+  top: 20%;
+  right: 20%;
+}
+
+.mini-dot.middle-left {
+  top: 50%;
+  left: 20%;
+  transform: translateY(-50%);
+}
+
+.mini-dot.middle-right {
+  top: 50%;
+  right: 20%;
+  transform: translateY(-50%);
+}
+
+.mini-dot.bottom-left {
+  bottom: 20%;
+  left: 20%;
+}
+
+.mini-dot.bottom-right {
+  bottom: 20%;
+  right: 20%;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .mini-die {
+    width: 36px;
+    height: 36px;
+    border-radius: 5px;
+  }
+  
+  .mini-dot {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mini-die {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+  }
+  
+  .mini-dot {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+@media (max-width: 360px) {
+  .mini-die {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+  }
+  
+  .mini-dot {
+    width: 4px;
+    height: 4px;
+  }
+} 

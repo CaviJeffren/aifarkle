@@ -1,0 +1,43 @@
+.modal-footer {
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.modal-footer .btn {
+  min-width: 100px;
+  margin: 0 0.5rem;
+}
+
+/* 确保所有模态框的按钮容器都居中 */
+.game-rules-footer,
+.game-settings-footer,
+.game-modal-footer {
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+/* 垂直排列的按钮容器 */
+.modal-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  position: relative;
+  left: 0;
+  right: 0;
+}
+
+.modal-buttons-container .btn {
+  width: 100%;
+} 
