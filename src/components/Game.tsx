@@ -873,17 +873,6 @@ const Game: React.FC = () => {
     });
   };
 
-  // 检查玩家格罗申是否用完，如果用完则重置
-  useEffect(() => {
-    if (gameState.phase === GamePhase.BETTING && gameState.players[0].groschen <= 0) {
-      setModalContent({
-        title: '格罗申用完',
-        content: '您的格罗申已用完，无法继续下注。'
-      });
-      setShowModal(true);
-    }
-  }, [gameState.phase, gameState.players]);
-
   // 处理放弃游戏
   const handleForfeit = () => {
     setModalContent({
@@ -1023,32 +1012,51 @@ const Game: React.FC = () => {
 
   // 处理购买骰子
   const handleBuyDice = (diceType: DiceType) => {
+    const price = getDicePrice(diceType);
+    
+    // 检查玩家是否有足够的格罗申
+    if (gameState.players[0].groschen < price) {
+      setModalContent({
+        title: '格罗申不足',
+        content: `您没有足够的格罗申购买这个骰子。需要 ${price} 格罗申。`
+      });
+      setShowModal(true);
+      return;
+    }
+    
+    // 检查玩家是否已经拥有最大数量的这种骰子
+    const ownedCount = gameState.players[0].ownedDice.filter(type => type === diceType).length;
+    const maxOwned = getDiceMaxOwned(diceType);
+    if (ownedCount >= maxOwned) {
+      setModalContent({
+        title: '已达到最大数量',
+        content: `您已经拥有最大数量(${maxOwned})的这种骰子。`
+      });
+      setShowModal(true);
+      return;
+    }
+    
+    // 更新玩家的骰子列表
+    const updatedOwnedDice = [...gameState.players[0].ownedDice, diceType]; // 添加一个新的骰子
+    
+    // 使用GroschenService减少格罗申并更新玩家状态
+    const updatedPlayer = GroschenService.reduceGroschen(
+      gameState.players[0],
+      gameState.diceConfigs,
+      price,
+      `购买骰子: ${getDiceName(diceType)}`,
+      gameState.settings
+    );
+    
+    // 手动更新拥有的骰子列表，因为reduceGroschen不会更新这个
+    const playerWithUpdatedDice = {
+      ...updatedPlayer,
+      ownedDice: updatedOwnedDice
+    };
+    
     setGameState(prevState => {
-      const player = prevState.players[0]; // 玩家
-      const price = getDicePrice(diceType);
-      
-      // 检查玩家是否有足够的格罗申
-      if (player.groschen < price) {
-        return prevState;
-      }
-      
-      // 更新玩家的骰子列表
-      const updatedOwnedDice = [...player.ownedDice, diceType]; // 添加一个新的骰子
-      
-      // 使用 GroschenService 减少格罗申并更新骰子
-      const updatedPlayer = GroschenService.reduceGroschen(
-        {
-          ...player,
-          ownedDice: updatedOwnedDice
-        },
-        prevState.diceConfigs,
-        price,
-        `购买骰子: ${getDiceName(diceType)}`,
-        prevState.settings
-      );
-      
       const updatedPlayers = [...prevState.players];
-      updatedPlayers[0] = updatedPlayer;
+      updatedPlayers[0] = playerWithUpdatedDice;
       
       return {
         ...prevState,

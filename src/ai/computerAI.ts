@@ -65,6 +65,28 @@ const hasFourOfAKind = (unlockedDice: Die[]) => {
 };
 
 /**
+ * 查找单个1或5的骰子索引
+ * @param dice 所有骰子
+ * @param unlockedDice 未锁定的骰子
+ * @returns 单个1或5的骰子索引数组
+ */
+const findSingleOneOrFiveIndices = (dice: Die[], unlockedDice: Die[]): number[] => {
+  // 找出所有1和5的骰子
+  const onesAndFives = unlockedDice.filter(die => die.value === 1 || die.value === 5);
+  
+  // 如果没有1或5，返回空数组
+  if (onesAndFives.length === 0) {
+    return [];
+  }
+  
+  // 优先选择1（价值100分），其次选择5（价值50分）
+  const targetDie = onesAndFives.find(die => die.value === 1) || onesAndFives[0];
+  
+  // 返回这个骰子在原始数组中的索引
+  return [dice.findIndex(die => die.id === targetDie.id)];
+};
+
+/**
  * 电脑决策逻辑
  * @param dice 当前骰子状态
  * @param turnScore 当前回合分数
@@ -146,11 +168,33 @@ export const computerDecision = (
   
   const bestSelection = bestSelections[0];
   
+  // 新增策略：当骰子数量≥5且没有高分组合时，考虑只取走单个1或5
+  if (unlockedDice.length >= 5 && bestSelection.score < 300) {
+    // 检查是否有1或5
+    const hasOneOrFive = unlockedDice.some(die => die.value === 1 || die.value === 5);
+    
+    if (hasOneOrFive) {
+      // 根据难度决定是否采用这个策略
+      const useThisStrategy = Math.random() < (
+        difficulty === 'easy' ? 0.5 :
+        difficulty === 'medium' ? 0.7 :
+        0.9 // 困难模式
+      );
+      
+      if (useThisStrategy) {
+        const singleOneOrFiveIndices = findSingleOneOrFiveIndices(dice, unlockedDice);
+        if (singleOneOrFiveIndices.length > 0) {
+          return { shouldRoll: true, selectedDiceIndices: singleOneOrFiveIndices };
+        }
+      }
+    }
+  }
+  
   // 根据难度设置基础风险阈值
   const baseRiskThresholds = {
     easy: 0.3,    // 提高基础风险阈值，增加重掷概率
     medium: 0.45,  // 提高中等难度的风险阈值
-    hard: 0.6     // 提高困难难度的风险阈值
+    hard: 0.5     // 提高困难难度的风险阈值
   };
   
   // 计算当前回合总分
@@ -179,7 +223,6 @@ export const computerDecision = (
       return true;
     }
     
-    
     // 1. 根据剩余骰子数量调整风险 - 增强重掷偏好
     if (unlockedCount >= 4) {
       // 当未锁定骰子大于4个时，大幅增加重掷概率
@@ -192,7 +235,15 @@ export const computerDecision = (
     } else if (unlockedCount === 3) {
       riskThreshold += 0.05; // 轻微增加重掷概率
     } else if (unlockedCount <= 2) {
-      riskThreshold -= 0.3; // 更倾向于锁定分数，但比原来的0.4更温和
+      // 优化1：当未锁定骰子小于等于2个时，大幅降低重掷倾向
+      riskThreshold -= 0.45; // 原来是-0.3，现在增加到-0.45
+      
+      // 根据难度进一步调整
+      if (difficulty === 'easy') {
+        riskThreshold -= 0.1; // 简单模式更保守
+      } else if (difficulty === 'hard' && potentialScore < 300) {
+        riskThreshold -= 0.05; // 困难模式在低分时稍微保守一点
+      }
     }
     
     // 2. 根据当前回合分数调整风险
@@ -210,9 +261,9 @@ export const computerDecision = (
       if (unlockedCount <= 2) {
         // 剩余骰子少且对手接近胜利时，根据当前分数决定策略
         if (potentialScore >= 400) {
-          riskThreshold -= 0.25; // 有较高分数时更倾向于锁定，但比原来的0.3更温和
+          riskThreshold -= 0.3; // 有较高分数时更倾向于锁定，比原来的0.25更保守
         } else {
-          riskThreshold += 0.25; // 分数不高时更激进，原来是0.2
+          riskThreshold += 0.2; // 分数不高时激进，但比原来的0.25更保守
         }
       } else {
         riskThreshold += 0.25; // 对手接近胜利且有足够骰子时更激进，原来是0.2
@@ -225,7 +276,7 @@ export const computerDecision = (
       if (unlockedCount >= 4) {
         return Math.random() > 0.7; // 30%概率继续掷骰子
       }
-      return Math.random() > 0.8; // 否则20%概率继续掷骰子，原来是10%
+      return Math.random() > 0.85; // 否则15%概率继续掷骰子，比原来的20%更保守
     }
     
     // 5. 特殊情况处理
@@ -240,9 +291,9 @@ export const computerDecision = (
     // 7. 如果是困难模式，增加连续掷骰子的倾向，但在剩余骰子少时更保守
     if (difficulty === 'hard') {
       if (unlockedCount <= 2) {
-        return riskFactor < finalThreshold * 0.7; // 剩余骰子少时更保守，但比原来的0.6更激进
+        return riskFactor < finalThreshold * 0.5; // 剩余骰子少时更保守，比原来的0.7更保守
       } else if (potentialScore >= 500) {
-        return riskFactor < 0.3; // 高分时保守，但比原来的0.2更激进
+        return riskFactor < 0.2; // 高分时保守，比原来的0.3更保守
       } else if (riskFactor < 0.3) { // 原来是0.2
         return true; // 保持更高的激进性
       }

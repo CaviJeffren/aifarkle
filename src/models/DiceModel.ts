@@ -22,7 +22,10 @@ export enum DiceType {
   UNPOPULAR = 'UNPOPULAR',
   UNLUCKY = 'UNLUCKY',
   TRIPLE_THREE = 'TRIPLE_THREE',
-  CAVI_C = 'KAVI_C'
+  CAVI_C = 'KAVI_C',
+  ANGEL_AN = 'ANGEL_AN',
+  ANGEL_JI = 'ANGEL_JI',
+  ANGEL_LA = 'ANGEL_LA'
 }
 
 // 骰子数据接口
@@ -91,7 +94,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0001, // 0.01%几率获得
+    dropRate: 0.0002, // 0.02%几率获得
     maxOwned: 1,
     backgroundColor: '#e67e22',
     textColor: '#ffffff',
@@ -111,7 +114,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0001, // 0.01%几率获得
+    dropRate: 0.0003, // 0.03%几率获得
     maxOwned: 1,
     backgroundColor: '#f1c40f',
     textColor: '#000000',
@@ -131,7 +134,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0001, // 0.01%几率获得
+    dropRate: 0.0004, // 0.04%几率获得
     maxOwned: 1,
     backgroundColor: '#2ecc71',
     textColor: '#000000',
@@ -151,7 +154,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0001, // 0.01%几率获得
+    dropRate: 0.0005, // 0.05%几率获得
     maxOwned: 1,
     backgroundColor: '#3498db',
     textColor: '#ffffff',
@@ -171,7 +174,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0001, // 0.01%几率获得
+    dropRate: 0.0006, // 0.06%几率获得
     maxOwned: 1,
     backgroundColor: '#9b59b6',
     textColor: '#ffffff',
@@ -502,6 +505,66 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
       4: 0.111,
       5: 0.111,
       6: 0.111
+    }
+  },
+  [DiceType.ANGEL_AN]: {
+    type: DiceType.ANGEL_AN,
+    name: '安骰子',
+    description: '天使三骰之"安"',
+    price: 111,
+    canBeSold: true,
+    canBePurchased: false,
+    dropRate: 0.01, // 1%几率获得
+    maxOwned: 1,
+    backgroundColor: '#e6f7ff', // 浅蓝色背景
+    textColor: '#0066cc', // 深蓝色文字
+    probabilities: {
+      1: 0.13,
+      2: 0.13,
+      3: 0.13,
+      4: 0.13,
+      5: 0.214,
+      6: 0.266
+    }
+  },
+  [DiceType.ANGEL_JI]: {
+    type: DiceType.ANGEL_JI,
+    name: '吉骰子',
+    description: '天使三骰之"吉"',
+    price: 222,
+    canBeSold: true,
+    canBePurchased: false,
+    dropRate: 0.02, // 2%几率获得
+    maxOwned: 1,
+    backgroundColor: '#fff1e6', // 浅橙色背景
+    textColor: '#cc6600', // 深橙色文字
+    probabilities: {
+      1: 0.13,
+      2: 0.13,
+      3: 0.13,
+      4: 0.13,
+      5: 0.214,
+      6: 0.266
+    }
+  },
+  [DiceType.ANGEL_LA]: {
+    type: DiceType.ANGEL_LA,
+    name: '拉骰子',
+    description: '天使三骰之"拉"',
+    price: 333,
+    canBeSold: true,
+    canBePurchased: false,
+    dropRate: 0.03, // 3%几率获得
+    maxOwned: 1,
+    backgroundColor: '#f0e6ff', // 浅紫色背景
+    textColor: '#6600cc', // 深紫色文字
+    probabilities: {
+      1: 0.13,
+      2: 0.13,
+      3: 0.13,
+      4: 0.13,
+      5: 0.214,
+      6: 0.266
     }
   }
 };
