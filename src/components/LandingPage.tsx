@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Image } from 'react-bootstrap';
 import GameRules from './GameRules';
 import GameSettings from './GameSettings';
 import BettingPanel from './BettingPanel';
 import { GameSettings as GameSettingsType } from '../types';
 import '../styles/LandingPage.css';
+import diceIcon from '../assets/dice-coin.png';
 
 interface LandingPageProps {
   onStartGame: () => void;
@@ -49,7 +50,16 @@ const LandingPage: React.FC<LandingPageProps> = ({
       <Row className="justify-content-center">
         <Col md={8} className="text-center">
           <div className="landing-header">
-            <h1>天国骰子</h1>
+            <div className="game-title-container">
+              <Image 
+                src={diceIcon} 
+                alt="骰子金币" 
+                className="dice-coin-icon" 
+                width={80} 
+                height={80}
+              />
+              <h1 className="game-title">天国骰子</h1>
+            </div>
           </div>
           
           <div className="groschen-display landing-groschen">
@@ -94,7 +104,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           ) : (
             <div className="betting-container">
-              <h3>请选择下注金额</h3>
               <BettingPanel
                 playerGroschen={playerGroschen}
                 onPlaceBet={handlePlaceBet}

@@ -148,9 +148,9 @@ export const computerDecision = (
   
   // 根据难度设置基础风险阈值
   const baseRiskThresholds = {
-    easy: 0.2,    // 降低基础风险阈值
-    medium: 0.35,
-    hard: 0.5
+    easy: 0.3,    // 提高基础风险阈值，增加重掷概率
+    medium: 0.45,  // 提高中等难度的风险阈值
+    hard: 0.6     // 提高困难难度的风险阈值
   };
   
   // 计算当前回合总分
@@ -179,25 +179,29 @@ export const computerDecision = (
       return true;
     }
     
-    // 如果锁定了5个或6个骰子，强制重掷
-    if (bestSelection.diceCount >= 5) {
-      return true;
-    }
     
-    // 1. 根据剩余骰子数量调整风险
+    // 1. 根据剩余骰子数量调整风险 - 增强重掷偏好
     if (unlockedCount >= 4) {
-      riskThreshold += 0.1; // 降低继续掷骰子的倾向
+      // 当未锁定骰子大于4个时，大幅增加重掷概率
+      riskThreshold += 0.25; // 原来是0.1，现在增加到0.25
+      
+      // 对于困难模式，当未锁定骰子大于4个时，额外增加重掷概率
+      if (difficulty === 'hard' && unlockedCount >= 5) {
+        riskThreshold += 0.15;
+      }
+    } else if (unlockedCount === 3) {
+      riskThreshold += 0.05; // 轻微增加重掷概率
     } else if (unlockedCount <= 2) {
-      riskThreshold -= 0.4; // 更倾向于锁定分数
+      riskThreshold -= 0.3; // 更倾向于锁定分数，但比原来的0.4更温和
     }
     
     // 2. 根据当前回合分数调整风险
     if (potentialScore >= 750) {
-      riskThreshold -= 0.4; // 更保守地保护高分
+      riskThreshold -= 0.35; // 更保守地保护高分，但比原来的0.4更温和
     } else if (potentialScore >= 500) {
-      riskThreshold -= 0.3; // 中高分也倾向于保守
+      riskThreshold -= 0.25; // 中高分也倾向于保守，但比原来的0.3更温和
     } else if (potentialScore <= 200) {
-      riskThreshold += 0.1; // 低分时稍微激进一点
+      riskThreshold += 0.15; // 低分时更激进一点，原来是0.1
     }
     
     // 3. 根据对手情况调整风险
@@ -206,12 +210,12 @@ export const computerDecision = (
       if (unlockedCount <= 2) {
         // 剩余骰子少且对手接近胜利时，根据当前分数决定策略
         if (potentialScore >= 400) {
-          riskThreshold -= 0.3; // 有较高分数时更倾向于锁定
+          riskThreshold -= 0.25; // 有较高分数时更倾向于锁定，但比原来的0.3更温和
         } else {
-          riskThreshold += 0.2; // 分数不高时适度冒险
+          riskThreshold += 0.25; // 分数不高时更激进，原来是0.2
         }
       } else {
-        riskThreshold += 0.2; // 对手接近胜利且有足够骰子时适度激进
+        riskThreshold += 0.25; // 对手接近胜利且有足够骰子时更激进，原来是0.2
       }
     }
     
@@ -221,26 +225,26 @@ export const computerDecision = (
       if (unlockedCount >= 4) {
         return Math.random() > 0.7; // 30%概率继续掷骰子
       }
-      return Math.random() > 0.9; // 否则10%概率继续掷骰子
+      return Math.random() > 0.8; // 否则20%概率继续掷骰子，原来是10%
     }
     
     // 5. 特殊情况处理
     if (isOpponentClose && potentialScore < 400 && unlockedCount > 2) {
-      return Math.random() > 0.3; // 70%概率继续尝试
+      return Math.random() > 0.25; // 75%概率继续尝试，原来是70%
     }
     
     // 6. 根据难度调整最终决策
-    const finalThreshold = Math.min(0.8, Math.max(0.1, riskThreshold));
+    const finalThreshold = Math.min(0.85, Math.max(0.15, riskThreshold)); // 扩大阈值范围
     const riskFactor = Math.random();
     
     // 7. 如果是困难模式，增加连续掷骰子的倾向，但在剩余骰子少时更保守
     if (difficulty === 'hard') {
       if (unlockedCount <= 2) {
-        return riskFactor < finalThreshold * 0.6; // 剩余骰子少时更保守
+        return riskFactor < finalThreshold * 0.7; // 剩余骰子少时更保守，但比原来的0.6更激进
       } else if (potentialScore >= 500) {
-        return riskFactor < 0.2; // 高分时非常保守
-      } else if (riskFactor < 0.2) {
-        return true; // 保持少许激进性
+        return riskFactor < 0.3; // 高分时保守，但比原来的0.2更激进
+      } else if (riskFactor < 0.3) { // 原来是0.2
+        return true; // 保持更高的激进性
       }
     }
     

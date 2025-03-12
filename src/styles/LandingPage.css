@@ -8,14 +8,49 @@
   margin-bottom: 30px;
 }
 
-.landing-header h1 {
+/* 新增游戏标题容器样式 */
+.game-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* 金币图标样式 */
+.dice-coin-icon {
+  margin-right: 15px;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+  animation: shine 3s infinite alternate;
+  transition: transform 0.3s ease;
+}
+
+.dice-coin-icon:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* 游戏标题样式 */
+.game-title {
   color: var(--kcd-red);
   font-family: var(--kcd-font-main);
-  font-size: 3rem;
+  font-size: 3.5rem;
   text-transform: uppercase;
   letter-spacing: 3px;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3),
+               0 0 10px rgba(255, 0, 0, 0.2);
+  background: linear-gradient(to bottom, #d4af37 0%, #f9d423 50%, #8a6e2f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+@keyframes shine {
+  from {
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+  }
+  to {
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+  }
 }
 
 .landing-header .subtitle {
@@ -72,8 +107,13 @@
 }
 
 @media (max-width: 768px) {
-  .landing-header h1 {
-    font-size: 2.5rem;
+  .game-title {
+    font-size: 2.8rem;
+  }
+  
+  .dice-coin-icon {
+    width: 60px;
+    height: 60px;
   }
   
   .landing-button {
@@ -87,8 +127,14 @@
 }
 
 @media (max-width: 576px) {
-  .landing-header h1 {
-    font-size: 2rem;
+  .game-title {
+    font-size: 2.2rem;
+  }
+  
+  .dice-coin-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
   }
   
   .landing-buttons {
