@@ -1,4 +1,5 @@
-import { Die, DiceType } from './types';
+import { Die } from './types';
+import { DiceType } from './models/DiceModel';
 
 // 生成1-6之间的随机数
 export const rollDie = (): number => {

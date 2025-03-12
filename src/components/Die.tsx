@@ -1,5 +1,5 @@
 import React from 'react';
-import { DICE_CONFIGS, DiceType } from '../types';
+import { DiceType, DICE_DATA } from '../models/DiceModel';
 import '../styles/Die.css';
 
 interface DieProps {
@@ -12,11 +12,11 @@ interface DieProps {
 }
 
 const Die: React.FC<DieProps> = ({ value, type, selected, locked, onClick }) => {
-  const diceConfig = DICE_CONFIGS[type];
+  const diceData = DICE_DATA[type];
   
   const style = {
-    backgroundColor: diceConfig.backgroundColor,
-    color: diceConfig.textColor,
+    backgroundColor: diceData.backgroundColor,
+    color: diceData.textColor,
     border: selected ? '2px solid #4CAF50' : locked ? '2px solid #f44336' : '2px solid #ccc',
     cursor: locked ? 'not-allowed' : 'pointer',
     opacity: locked ? 0.7 : 1,

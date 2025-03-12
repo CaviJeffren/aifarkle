@@ -1,4 +1,5 @@
-import { Die, DiceType } from '../types';
+import { Die } from '../types';
+import { DiceType } from '../models/DiceModel';
 import { calculateSelectionScore, hasValidSelection } from '../utils';
 
 /**

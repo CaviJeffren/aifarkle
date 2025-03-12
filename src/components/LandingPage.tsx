@@ -27,6 +27,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showBetting, setShowBetting] = useState(false);
+  const [settings, setSettings] = useState<GameSettingsType>(initialSettings);
   
   const handleStartClick = () => {
     setShowBetting(true);
@@ -36,6 +37,11 @@ const LandingPage: React.FC<LandingPageProps> = ({
     onPlaceBet(amount);
     setShowBetting(false);
     onStartGame();
+  };
+  
+  const handleSaveSettings = (newSettings: GameSettingsType) => {
+    setSettings(newSettings);
+    onSaveSettings(newSettings);
   };
   
   return (
@@ -92,6 +98,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
               <BettingPanel
                 playerGroschen={playerGroschen}
                 onPlaceBet={handlePlaceBet}
+                computerDifficulty={settings.computerDifficulty}
               />
               <Button 
                 variant="kcd" 
@@ -108,8 +115,8 @@ const LandingPage: React.FC<LandingPageProps> = ({
       <GameSettings
         show={showSettings}
         onHide={() => setShowSettings(false)}
-        onSave={onSaveSettings}
-        initialSettings={initialSettings}
+        onSave={handleSaveSettings}
+        initialSettings={settings}
       />
     </Container>
   );

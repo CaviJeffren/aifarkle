@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Container, Row, Col, Button, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Button, Modal, Form, Alert } from 'react-bootstrap';
 import DiceContainer from './DiceContainer';
 import ScoreBoard from './ScoreBoard';
 import GameControls from './GameControls';
@@ -7,15 +7,14 @@ import GameRules from './GameRules';
 import GameSettings from './GameSettings';
 import GameModal from './GameModal';
 import BettingPanel from './BettingPanel';
+import RewardDiceModal from './RewardDiceModal';
 import { 
   GamePhase, 
   GameState, 
   GameSettings as GameSettingsType,
   Die,
-  DiceType,
   PlayerDiceConfig,
-  DICE_CONFIGS,
-  DICE_PRICES
+  Player,
 } from '../types';
 import { 
   initializeDice, 
@@ -31,6 +30,26 @@ import LandingPage from './LandingPage';
 import DiceSelector from './DiceSelector';
 import DiceShop from './DiceShop';
 import LockedDiceContainer from './LockedDiceContainer';
+import { 
+  getUserData, 
+  saveUserData, 
+  updateUserGroschen, 
+  updateUserOwnedDice, 
+  updateUserDiceConfigs,
+  isLocalStorageAvailable
+} from '../services/LocalStorageService';
+import { GroschenService } from '../services/GroschenService';
+import {
+  DiceType,
+  DICE_DATA, 
+  getDiceName, 
+  getDicePrice, 
+  getDiceSellPrice, 
+  getDiceProbabilities,
+  rollDice as rollDiceByType,
+  getRandomRewardDice,
+  getDiceMaxOwned
+} from '../models/DiceModel';
 
 const initialSettings: GameSettingsType = {
   targetScore: 4000,
@@ -45,17 +64,8 @@ const initialState: GameState = {
       score: 0, 
       turnScore: 0, 
       isComputer: false, 
-      groschen: 100,
-      ownedDice: [
-        // 每种卡维尔测试骰子各6个
-        ...Array(6).fill(DiceType.KAVIEL_1),
-        ...Array(6).fill(DiceType.KAVIEL_2),
-        ...Array(6).fill(DiceType.KAVIEL_3),
-        ...Array(6).fill(DiceType.KAVIEL_4),
-        ...Array(6).fill(DiceType.KAVIEL_5),
-        ...Array(6).fill(DiceType.KAVIEL_6),
-        DiceType.NORMAL
-      ]
+      groschen: 50,
+      ownedDice: Array(6).fill(DiceType.NORMAL)
     },
     { 
       name: '电脑', 
@@ -69,10 +79,7 @@ const initialState: GameState = {
   currentPlayerIndex: 0,
   phase: GamePhase.BETTING,
   rollCount: 0,
-  settings: {
-    targetScore: 10000,
-    computerDifficulty: 'medium'
-  },
+  settings: initialSettings,
   winner: null,
   bet: 0,
   diceConfigs: {
@@ -230,16 +237,49 @@ const checkForPossibleScoring = (dice: Array<{id: number; value: number; selecte
 };
 
 const Game: React.FC = () => {
-  const [gameState, setGameState] = useState<GameState>(initialState);
+  const [gameState, setGameState] = useState<GameState>(() => {
+    // 尝试从本地存储加载用户数据
+    const userData = getUserData();
+    
+    if (userData) {
+      // 如果有本地存储的数据，使用它来初始化游戏状态
+      return {
+        ...initialState,
+        players: [
+          {
+            ...initialState.players[0],
+            groschen: userData.groschen,
+            ownedDice: userData.ownedDice
+          },
+          initialState.players[1]
+        ],
+        diceConfigs: userData.diceConfigs,
+        settings: userData.gameSettings || initialSettings // 使用存储的游戏设置或默认设置
+      };
+    }
+    
+    // 如果没有用户数据，这是新用户，保存默认设置到本地存储
+    saveUserData(
+      initialState.players[0], 
+      initialState.diceConfigs, 
+      initialSettings
+    );
+    console.log('新用户创建，保存默认游戏设置到本地存储:', initialSettings);
+    
+    // 否则使用默认初始状态
+    return initialState;
+  });
   const [showRules, setShowRules] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showDiceSelector, setShowDiceSelector] = useState(false);
   const [showDiceShop, setShowDiceShop] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showGameScreen, setShowGameScreen] = useState(false);
+  const [showRewardModal, setShowRewardModal] = useState(false);
   const [modalContent, setModalContent] = useState({ title: '', content: '' });
   const [selectionScore, setSelectionScore] = useState(0);
   const [isForfeitConfirmation, setIsForfeitConfirmation] = useState(false);
+  const [rewardDice, setRewardDice] = useState<DiceType | null>(null);
   
   // 获取当前玩家和计算机回合状态
   const currentPlayer = gameState.players[gameState.currentPlayerIndex];
@@ -294,32 +334,45 @@ const Game: React.FC = () => {
   // 开始新游戏
   const handleStartGame = () => {
     setShowGameScreen(true);
-    setGameState(prevState => ({
-      ...initialState,
-      phase: GamePhase.ROLL,
-      settings: prevState.settings,
-      diceConfigs: prevState.diceConfigs, // 保持用户的骰子配置
-      dice: initializeDiceWithConfig(), // 使用配置初始化骰子
-      players: [
-        { 
-          name: '玩家', 
-          score: 0, 
-          turnScore: 0, 
-          isComputer: false, 
-          groschen: prevState.players[0].groschen,
-          ownedDice: prevState.players[0].ownedDice // 保持玩家拥有的骰子
-        },
-        { 
-          name: '电脑', 
-          score: 0, 
-          turnScore: 0, 
-          isComputer: true, 
-          groschen: 0,
-          ownedDice: [DiceType.NORMAL]
-        }
-      ],
-      bet: prevState.bet
-    }));
+    setGameState(prevState => {
+      const newState = {
+        ...initialState,
+        phase: GamePhase.ROLL,
+        settings: prevState.settings,
+        diceConfigs: prevState.diceConfigs, // 保持用户的骰子配置
+        dice: initializeDiceWithConfig(), // 使用配置初始化骰子
+        players: [
+          { 
+            name: '玩家', 
+            score: 0, 
+            turnScore: 0, 
+            isComputer: false, 
+            groschen: prevState.players[0].groschen,
+            ownedDice: prevState.players[0].ownedDice // 保持玩家拥有的骰子
+          },
+          { 
+            name: '电脑', 
+            score: 0, 
+            turnScore: 0, 
+            isComputer: true, 
+            groschen: 0,
+            ownedDice: [DiceType.NORMAL]
+          }
+        ],
+        bet: prevState.bet
+      };
+      
+      // 使用 GroschenService 保存用户数据
+      GroschenService.setGroschen(
+        newState.players[0],
+        newState.diceConfigs,
+        newState.players[0].groschen,
+        '开始新游戏',
+        newState.settings
+      );
+      
+      return newState;
+    });
   };
   
   // 掷骰子
@@ -564,8 +617,34 @@ const Game: React.FC = () => {
             };
             console.log('玩家获胜，增加格罗申:', winAmount);
             console.log('结算后格罗申:', newPlayers[0].groschen);
+            
+            // 尝试获得特殊骰子
+            const rewardDiceType = getRandomRewardDice();
+            let rewardMessage = '';
+            
+            if (rewardDiceType) {
+              // 检查玩家是否已经达到该骰子的最大拥有数量
+              const ownedCount = newPlayers[0].ownedDice.filter(type => type === rewardDiceType).length;
+              const maxOwned = getDiceMaxOwned(rewardDiceType);
+              
+              if (ownedCount < maxOwned) {
+                // 玩家获得了特殊骰子
+                newPlayers[0] = {
+                  ...newPlayers[0],
+                  ownedDice: [...newPlayers[0].ownedDice, rewardDiceType]
+                };
+                
+                // 立即保存玩家的骰子数据到本地存储
+                updateUserOwnedDice(newPlayers[0].ownedDice);
+                
+                // 设置奖励骰子状态，用于显示弹窗
+                setRewardDice(rewardDiceType);
+                
+                rewardMessage = `\n\n恭喜！你获得了一个特殊骰子：${getDiceName(rewardDiceType)}`;
+                console.log('玩家获得特殊骰子:', getDiceName(rewardDiceType));
+              }
+            }
           }
-          // 如果电脑赢了，玩家已经在下注时扣除了格罗申，不需要额外操作
           
           // 显示游戏结束弹窗
           const winner = newPlayers[playerIndex];
@@ -639,10 +718,17 @@ const Game: React.FC = () => {
   
   // 保存游戏设置
   const handleSaveSettings = (settings: GameSettingsType) => {
-    setGameState(prevState => ({
-      ...prevState,
-      settings
-    }));
+    setGameState(prevState => {
+      const newState = {
+        ...prevState,
+        settings
+      };
+      
+      // 保存游戏设置到本地存储，确保传递 settings 参数
+      saveUserData(newState.players[0], newState.diceConfigs, settings);
+      
+      return newState;
+    });
   };
   
   // 电脑AI逻辑 - 优化版本
@@ -725,14 +811,17 @@ const Game: React.FC = () => {
     console.log('下注金额:', amount);
     
     setGameState(prevState => {
-      const newGroschen = prevState.players[0].groschen - amount;
-      console.log('下注后格罗申:', newGroschen);
+      // 使用 GroschenService 减少格罗申
+      const updatedPlayer = GroschenService.reduceGroschen(
+        prevState.players[0],
+        prevState.diceConfigs,
+        amount,
+        '下注',
+        prevState.settings
+      );
       
       const newPlayers = [...prevState.players];
-      newPlayers[0] = {
-        ...newPlayers[0],
-        groschen: newGroschen
-      };
+      newPlayers[0] = updatedPlayer;
       
       return {
         ...prevState,
@@ -743,32 +832,45 @@ const Game: React.FC = () => {
     
     // 下注后直接开始游戏
     setShowGameScreen(true);
-    setGameState(prevState => ({
-      ...initialState,
-      phase: GamePhase.ROLL,
-      settings: prevState.settings,
-      diceConfigs: prevState.diceConfigs, // 保持用户的骰子配置
-      dice: initializeDiceWithConfig(),
-      bet: amount,
-      players: [
-        { 
-          name: '玩家', 
-          score: 0, 
-          turnScore: 0, 
-          isComputer: false, 
-          groschen: prevState.players[0].groschen,
-          ownedDice: prevState.players[0].ownedDice // 保持玩家拥有的骰子
-        },
-        { 
-          name: '电脑', 
-          score: 0, 
-          turnScore: 0, 
-          isComputer: true, 
-          groschen: 0,
-          ownedDice: [DiceType.NORMAL]
-        }
-      ]
-    }));
+    setGameState(prevState => {
+      const newState = {
+        ...initialState,
+        phase: GamePhase.ROLL,
+        settings: prevState.settings,
+        diceConfigs: prevState.diceConfigs, // 保持用户的骰子配置
+        dice: initializeDiceWithConfig(),
+        bet: amount,
+        players: [
+          { 
+            name: '玩家', 
+            score: 0, 
+            turnScore: 0, 
+            isComputer: false, 
+            groschen: prevState.players[0].groschen,
+            ownedDice: prevState.players[0].ownedDice // 保持玩家拥有的骰子
+          },
+          { 
+            name: '电脑', 
+            score: 0, 
+            turnScore: 0, 
+            isComputer: true, 
+            groschen: 0,
+            ownedDice: [DiceType.NORMAL]
+          }
+        ]
+      };
+      
+      // 使用 GroschenService 保存用户数据
+      GroschenService.setGroschen(
+        newState.players[0],
+        newState.diceConfigs,
+        newState.players[0].groschen,
+        '开始新游戏',
+        newState.settings
+      );
+      
+      return newState;
+    });
   };
 
   // 检查玩家格罗申是否用完，如果用完则重置
@@ -776,17 +878,9 @@ const Game: React.FC = () => {
     if (gameState.phase === GamePhase.BETTING && gameState.players[0].groschen <= 0) {
       setModalContent({
         title: '格罗申用完',
-        content: '您的格罗申已用完，已为您重置为50格罗申。'
+        content: '您的格罗申已用完，无法继续下注。'
       });
       setShowModal(true);
-      
-      setGameState(prevState => ({
-        ...prevState,
-        players: [
-          { ...prevState.players[0], groschen: 50 },
-          { ...prevState.players[1] }
-        ]
-      }));
     }
   }, [gameState.phase, gameState.players]);
 
@@ -800,7 +894,7 @@ const Game: React.FC = () => {
     setIsForfeitConfirmation(true);
   };
 
-  // 确认放弃游戏
+  // 处理确认放弃游戏
   const handleConfirmForfeit = () => {
     setShowModal(false);
     setIsForfeitConfirmation(false);
@@ -809,20 +903,33 @@ const Game: React.FC = () => {
     setShowGameScreen(false);
     
     // 重置游戏状态，但保留玩家的格罗申（已扣除下注金额）
-    setGameState(prevState => ({
-      ...initialState,
-      phase: GamePhase.BETTING,
-      diceConfigs: prevState.diceConfigs,
-      players: [
-        { 
-          ...initialState.players[0], 
-          groschen: prevState.players[0].groschen,
-          ownedDice: prevState.players[0].ownedDice
-        },
-        { ...initialState.players[1] }
-      ],
-      settings: prevState.settings
-    }));
+    setGameState(prevState => {
+      const newState = {
+        ...initialState,
+        phase: GamePhase.BETTING,
+        diceConfigs: prevState.diceConfigs, // 保持用户的骰子配置
+        players: [
+          { 
+            ...initialState.players[0], 
+            groschen: prevState.players[0].groschen, // 保持当前格罗申（下注时已扣除）
+            ownedDice: prevState.players[0].ownedDice // 保持玩家拥有的骰子
+          },
+          { ...initialState.players[1] }
+        ],
+        settings: prevState.settings
+      };
+      
+      // 使用 GroschenService 保存用户数据，但不改变格罗申数量
+      GroschenService.setGroschen(
+        newState.players[0],
+        newState.diceConfigs,
+        newState.players[0].groschen,
+        '放弃游戏',
+        prevState.settings
+      );
+      
+      return newState;
+    });
   };
 
   // 处理关闭游戏结束弹窗
@@ -835,56 +942,110 @@ const Game: React.FC = () => {
       return;
     }
     
-    // 如果游戏已结束，返回首页并保持玩家的格罗申余额
+    // 如果游戏已结束
     if (gameState.phase === GamePhase.GAME_OVER) {
       console.log('游戏结束时的格罗申:', gameState.players[0].groschen);
       
-      setGameState(prevState => {
-        console.log('重置游戏时的格罗申:', prevState.players[0].groschen);
-        return {
-          ...initialState,
-          phase: GamePhase.BETTING,
-          diceConfigs: prevState.diceConfigs, // 保持用户的骰子配置
-          players: [
-            { 
-              ...initialState.players[0], 
-              groschen: prevState.players[0].groschen,
-              ownedDice: prevState.players[0].ownedDice // 保持玩家拥有的骰子
-            },
-            { ...initialState.players[1] }
-          ],
-          settings: prevState.settings
-        };
-      });
-      setShowGameScreen(false);
+      // 如果玩家获得了特殊骰子，显示恭喜获得特殊骰子的弹窗
+      if (rewardDice) {
+        setShowRewardModal(true);
+        return; // 不立即返回首页，等待玩家关闭恭喜获得特殊骰子的弹窗
+      }
+      
+      // 如果没有获得特殊骰子，直接返回首页并重置游戏状态
+      resetGameAndReturnToHome();
     }
+  };
+  
+  // 处理关闭恭喜获得特殊骰子弹窗
+  const handleCloseRewardModal = () => {
+    setShowRewardModal(false);
+    setRewardDice(null); // 重置奖励骰子状态
+    
+    // 返回首页并重置游戏状态
+    resetGameAndReturnToHome();
+  };
+  
+  // 重置游戏状态并返回首页
+  const resetGameAndReturnToHome = () => {
+    setGameState(prevState => {
+      console.log('重置游戏时的格罗申:', prevState.players[0].groschen);
+      
+      const newState = {
+        ...initialState,
+        phase: GamePhase.BETTING,
+        diceConfigs: prevState.diceConfigs, // 保持用户的骰子配置
+        players: [
+          { 
+            ...initialState.players[0], 
+            groschen: prevState.players[0].groschen,
+            ownedDice: prevState.players[0].ownedDice // 保持玩家拥有的骰子
+          },
+          { ...initialState.players[1] }
+        ],
+        settings: prevState.settings
+      };
+      
+      // 使用 GroschenService 保存用户数据
+      GroschenService.setGroschen(
+        newState.players[0],
+        newState.diceConfigs,
+        newState.players[0].groschen,
+        '游戏结束重置',
+        prevState.settings
+      );
+      
+      return newState;
+    });
+    setShowGameScreen(false);
   };
 
   // 处理骰子配置保存
   const handleSaveDiceConfig = (config: PlayerDiceConfig) => {
-    setGameState(prevState => ({
-      ...prevState,
-      diceConfigs: config
-    }));
+    setGameState(prevState => {
+      const newState = {
+        ...prevState,
+        diceConfigs: config
+      };
+      
+      // 使用 GroschenService 保存用户数据
+      GroschenService.setGroschen(
+        newState.players[0],
+        config,
+        newState.players[0].groschen,
+        '保存骰子配置',
+        prevState.settings
+      );
+      
+      return newState;
+    });
   };
 
   // 处理购买骰子
   const handleBuyDice = (diceType: DiceType) => {
     setGameState(prevState => {
       const player = prevState.players[0]; // 玩家
-      const price = DICE_PRICES[diceType];
+      const price = getDicePrice(diceType);
       
       // 检查玩家是否有足够的格罗申
       if (player.groschen < price) {
         return prevState;
       }
       
-      // 更新玩家的骰子列表和格罗申余额
-      const updatedPlayer = {
-        ...player,
-        ownedDice: [...player.ownedDice, diceType], // 添加一个新的骰子
-        groschen: player.groschen - price
-      };
+      // 更新玩家的骰子列表
+      const updatedOwnedDice = [...player.ownedDice, diceType]; // 添加一个新的骰子
+      
+      // 使用 GroschenService 减少格罗申并更新骰子
+      const updatedPlayer = GroschenService.reduceGroschen(
+        {
+          ...player,
+          ownedDice: updatedOwnedDice
+        },
+        prevState.diceConfigs,
+        price,
+        `购买骰子: ${getDiceName(diceType)}`,
+        prevState.settings
+      );
       
       const updatedPlayers = [...prevState.players];
       updatedPlayers[0] = updatedPlayer;
@@ -900,8 +1061,7 @@ const Game: React.FC = () => {
   const handleSellDice = (diceType: DiceType) => {
     setGameState(prevState => {
       const player = prevState.players[0]; // 玩家
-      const price = DICE_PRICES[diceType];
-      const sellPrice = Math.floor(price * 0.7); // 出售价格为原价的70%
+      const sellPrice = getDiceSellPrice(diceType); // 出售价格已经是原价的70%
       
       // 计算已使用的该类型骰子数量
       const usedCount = prevState.diceConfigs.diceConfigs.filter(type => type === diceType).length;
@@ -930,15 +1090,21 @@ const Game: React.FC = () => {
         return prevState;
       }
       
-      // 更新玩家的骰子列表和格罗申余额
+      // 更新玩家的骰子列表
       const updatedOwnedDice = [...player.ownedDice];
       updatedOwnedDice.splice(indexToRemove, 1); // 移除一个骰子
       
-      const updatedPlayer = {
-        ...player,
-        ownedDice: updatedOwnedDice,
-        groschen: player.groschen + sellPrice
-      };
+      // 使用 GroschenService 增加格罗申并更新骰子
+      const updatedPlayer = GroschenService.addGroschen(
+        {
+          ...player,
+          ownedDice: updatedOwnedDice
+        },
+        prevState.diceConfigs,
+        sellPrice,
+        `出售骰子: ${getDiceName(diceType)}`,
+        prevState.settings
+      );
       
       const updatedPlayers = [...prevState.players];
       updatedPlayers[0] = updatedPlayer;
@@ -957,18 +1123,8 @@ const Game: React.FC = () => {
 
   // 修改掷骰子函数以支持特殊骰子
   const rollDie = (type: DiceType): number => {
-    const probabilities = DICE_CONFIGS[type].probabilities;
-    const random = Math.random();
-    let sum = 0;
-    
-    for (let i = 1; i <= 6; i++) {
-      sum += probabilities[i];
-      if (random < sum) {
-        return i;
-      }
-    }
-    
-    return 6; // 默认返回6
+    // 直接使用DiceModel中的rollDiceByType函数
+    return rollDiceByType(type);
   };
 
   // 修改初始化骰子函数
@@ -981,6 +1137,34 @@ const Game: React.FC = () => {
       type: gameState.currentPlayerIndex === 0 ? gameState.diceConfigs.diceConfigs[index] : DiceType.NORMAL
     }));
   };
+
+  // 在格罗申数量变化时保存到本地存储
+  useEffect(() => {
+    if (gameState.phase !== GamePhase.START) {
+      updateUserGroschen(gameState.players[0].groschen);
+    }
+  }, [gameState.players[0].groschen]);
+
+  // 在拥有的骰子变化时保存到本地存储
+  useEffect(() => {
+    if (gameState.phase !== GamePhase.START) {
+      updateUserOwnedDice(gameState.players[0].ownedDice);
+    }
+  }, [gameState.players[0].ownedDice]);
+
+  // 在骰子配置变化时保存到本地存储
+  useEffect(() => {
+    if (gameState.phase !== GamePhase.START) {
+      updateUserDiceConfigs(gameState.diceConfigs);
+    }
+  }, [gameState.diceConfigs]);
+
+  // 在游戏结束时保存完整的用户数据
+  useEffect(() => {
+    if (gameState.phase === GamePhase.GAME_OVER) {
+      saveUserData(gameState.players[0], gameState.diceConfigs);
+    }
+  }, [gameState.phase]);
 
   return (
     <>
@@ -1071,6 +1255,13 @@ const Game: React.FC = () => {
             onConfirm={isForfeitConfirmation ? handleConfirmForfeit : undefined}
             showConfirmButton={isForfeitConfirmation}
           />
+          
+          {/* 恭喜获得特殊骰子弹窗 */}
+          <RewardDiceModal
+            show={showRewardModal}
+            onHide={handleCloseRewardModal}
+            rewardDice={rewardDice}
+          />
         </Container>
       )}
 
@@ -1080,7 +1271,6 @@ const Game: React.FC = () => {
         currentConfig={gameState.diceConfigs}
         onSave={handleSaveDiceConfig}
         ownedDice={gameState.players[0].ownedDice}
-        onSellDice={handleSellDice}
       />
 
       <DiceShop
@@ -1089,6 +1279,8 @@ const Game: React.FC = () => {
         playerGroschen={gameState.players[0].groschen}
         ownedDice={gameState.players[0].ownedDice}
         onBuyDice={handleBuyDice}
+        onSellDice={handleSellDice}
+        currentConfig={gameState.diceConfigs}
       />
     </>
   );

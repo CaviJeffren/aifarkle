@@ -1,4 +1,5 @@
-import { Die, GamePhase, GameState, DiceType } from '../types';
+import { Die, GamePhase, GameState } from '../types';
+import { DiceType } from '../models/DiceModel';
 import { calculateSelectionScore, hasValidSelection, isFarkle } from '../utils';
 
 /**

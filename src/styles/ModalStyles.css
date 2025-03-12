@@ -40,4 +40,32 @@
 
 .modal-buttons-container .btn {
   width: 100%;
+}
+
+/* 添加骰子奖励弹窗的样式 */
+.dice-name {
+  font-weight: bold;
+  color: #333;
+  margin-top: 15px;
+  font-size: 1.5rem;
+}
+
+.reward-message {
+  color: #666;
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.reward-dice-container {
+  animation: bounce 0.5s ease infinite alternate;
+  margin: 20px auto;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px);
+  }
 } 

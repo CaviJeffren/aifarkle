@@ -1,5 +1,5 @@
 import React from 'react';
-import { DICE_CONFIGS, DiceType } from '../types';
+import { DiceType, DICE_DATA } from '../models/DiceModel';
 import '../styles/MiniDie.css';
 
 interface MiniDieProps {
@@ -9,11 +9,11 @@ interface MiniDieProps {
 }
 
 const MiniDie: React.FC<MiniDieProps> = ({ value, type }) => {
-  const diceConfig = DICE_CONFIGS[type];
+  const diceData = DICE_DATA[type];
   
   const style = {
-    backgroundColor: diceConfig.backgroundColor,
-    color: diceConfig.textColor,
+    backgroundColor: diceData.backgroundColor,
+    color: diceData.textColor,
     border: '2px solid #ccc',
     boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
   };
