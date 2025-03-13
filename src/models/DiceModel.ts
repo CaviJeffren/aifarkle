@@ -74,7 +74,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0001, // 0.01%几率获得
+    dropRate: 0.001, // 0.1%几率获得
     maxOwned: 1,
     backgroundColor: '#e74c3c',
     textColor: '#ffffff',
@@ -94,7 +94,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0002, // 0.02%几率获得
+    dropRate: 0.002, // 0.2%几率获得
     maxOwned: 1,
     backgroundColor: '#e67e22',
     textColor: '#ffffff',
@@ -114,7 +114,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0003, // 0.03%几率获得
+    dropRate: 0.003, // 0.3%几率获得
     maxOwned: 1,
     backgroundColor: '#f1c40f',
     textColor: '#000000',
@@ -134,7 +134,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0004, // 0.04%几率获得
+    dropRate: 0.004, // 0.4%几率获得
     maxOwned: 1,
     backgroundColor: '#2ecc71',
     textColor: '#000000',
@@ -154,7 +154,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0005, // 0.05%几率获得
+    dropRate: 0.005, // 0.5%几率获得
     maxOwned: 1,
     backgroundColor: '#3498db',
     textColor: '#ffffff',
@@ -174,7 +174,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.0006, // 0.06%几率获得
+    dropRate: 0.006, // 0.6%几率获得
     maxOwned: 1,
     backgroundColor: '#9b59b6',
     textColor: '#ffffff',
@@ -239,12 +239,12 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     backgroundColor: '#e74c3c',
     textColor: '#ffffff',
     probabilities: {
-      1: 0.267,
-      2: 0.067,
-      3: 0.267,
-      4: 0.067,
-      5: 0.267,
-      6: 0.067
+      1: 0.237,
+      2: 0.097,
+      3: 0.237,
+      4: 0.097,
+      5: 0.237,
+      6: 0.097
     }
   },
   [DiceType.HEAVEN]: {
@@ -330,12 +330,12 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.LUCKY]: {
     type: DiceType.LUCKY,
     name: '幸运之骰',
-    description: '这个骰子会给你带来好运',
+    description: '容易出1和5，但数量有限',
     price: 777,
     canBeSold: true,
     canBePurchased: false,
     dropRate: 0.007, // 0.7%几率获得
-    maxOwned: 6,
+    maxOwned: 3,
     backgroundColor: '#2ecc71',
     textColor: '#000000',
     probabilities: {
@@ -350,12 +350,12 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.SMALL_LUCKY]: {
     type: DiceType.SMALL_LUCKY,
     name: '小幸运骰子',
-    description: '这个骰子会给你带来好运',
-    price: 77,
+    description: '容易出1和5，但数量有限',
+    price: 777,
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.07, // 7%几率获得
-    maxOwned: 6,
+    maxOwned: 3,
     backgroundColor: '#2ecc71',
     textColor: '#000000',
     probabilities: {
@@ -411,7 +411,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     type: DiceType.RIGGED,
     name: '动过手脚的骰子',
     description: '最基础的出千骰子',
-    price: 25,
+    price: 50,
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.1, // 10%几率获得
@@ -419,11 +419,11 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     backgroundColor: '#7f8c8d',
     textColor: '#ffffff',
     probabilities: {
-      1: 0.25,
-      2: 0.333,
+      1: 0.23,
+      2: 0.374,
       3: 0.083,
       4: 0.083,
-      5: 0.167,
+      5: 0.147,
       6: 0.083
     }
   },

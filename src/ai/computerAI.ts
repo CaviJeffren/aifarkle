@@ -87,6 +87,81 @@ const findSingleOneOrFiveIndices = (dice: Die[], unlockedDice: Die[]): number[] 
 };
 
 /**
+ * 查找四连或更多以及1和5的组合
+ * @param dice 所有骰子
+ * @param unlockedDice 未锁定的骰子
+ * @returns 包含四连和1或5的骰子索引数组，如果没有这样的组合则返回null
+ */
+const findFourOfAKindWithOneOrFive = (dice: Die[], unlockedDice: Die[]): number[] | null => {
+  // 统计每个点数的出现次数
+  const valueCounts = new Map<number, number>();
+  unlockedDice.forEach(die => {
+    valueCounts.set(die.value, (valueCounts.get(die.value) || 0) + 1);
+  });
+  
+  // 找到出现4次或更多的点数
+  let fourOfAKindValue = 0;
+  let fourOfAKindCount = 0;
+  
+  valueCounts.forEach((count, value) => {
+    if (count >= 4 && (count > fourOfAKindCount || (count === fourOfAKindCount && value > fourOfAKindValue))) {
+      fourOfAKindValue = value;
+      fourOfAKindCount = count;
+    }
+  });
+  
+  // 如果没有四连，返回null
+  if (fourOfAKindCount < 4) {
+    return null;
+  }
+  
+  // 检查是否有1或5（且不是四连的点数）
+  const hasOne = fourOfAKindValue !== 1 && valueCounts.has(1) && (valueCounts.get(1) ?? 0) > 0;
+  const hasFive = fourOfAKindValue !== 5 && valueCounts.has(5) && (valueCounts.get(5) ?? 0) > 0;
+  
+  // 如果没有1或5，返回null
+  if (!hasOne && !hasFive) {
+    return null;
+  }
+  
+  // 选择所有四连的骰子和1或5
+  const selectedIndices: number[] = [];
+  
+  // 先添加所有四连的骰子
+  unlockedDice.forEach((die, index) => {
+    if (die.value === fourOfAKindValue) {
+      const dieIndex = dice.findIndex(d => d.id === die.id);
+      if (dieIndex !== -1) {
+        selectedIndices.push(dieIndex);
+      }
+    }
+  });
+  
+  // 然后添加1或5（优先添加1）
+  if (hasOne) {
+    // 找到第一个值为1的骰子
+    const oneIndex = unlockedDice.findIndex(die => die.value === 1);
+    if (oneIndex !== -1) {
+      const dieIndex = dice.findIndex(d => d.id === unlockedDice[oneIndex].id);
+      if (dieIndex !== -1) {
+        selectedIndices.push(dieIndex);
+      }
+    }
+  } else if (hasFive) {
+    // 找到第一个值为5的骰子
+    const fiveIndex = unlockedDice.findIndex(die => die.value === 5);
+    if (fiveIndex !== -1) {
+      const dieIndex = dice.findIndex(d => d.id === unlockedDice[fiveIndex].id);
+      if (dieIndex !== -1) {
+        selectedIndices.push(dieIndex);
+      }
+    }
+  }
+  
+  return selectedIndices.length > 0 ? selectedIndices : null;
+};
+
+/**
  * 电脑决策逻辑
  * @param dice 当前骰子状态
  * @param turnScore 当前回合分数
@@ -167,28 +242,6 @@ export const computerDecision = (
   });
   
   const bestSelection = bestSelections[0];
-  
-  // 新增策略：当骰子数量≥5且没有高分组合时，考虑只取走单个1或5
-  if (unlockedDice.length >= 5 && bestSelection.score < 300) {
-    // 检查是否有1或5
-    const hasOneOrFive = unlockedDice.some(die => die.value === 1 || die.value === 5);
-    
-    if (hasOneOrFive) {
-      // 根据难度决定是否采用这个策略
-      const useThisStrategy = Math.random() < (
-        difficulty === 'easy' ? 0.5 :
-        difficulty === 'medium' ? 0.7 :
-        0.9 // 困难模式
-      );
-      
-      if (useThisStrategy) {
-        const singleOneOrFiveIndices = findSingleOneOrFiveIndices(dice, unlockedDice);
-        if (singleOneOrFiveIndices.length > 0) {
-          return { shouldRoll: true, selectedDiceIndices: singleOneOrFiveIndices };
-        }
-      }
-    }
-  }
   
   // 根据难度设置基础风险阈值
   const baseRiskThresholds = {
@@ -302,6 +355,35 @@ export const computerDecision = (
     return riskFactor < finalThreshold;
   };
   
+  // 新增策略：检查是否有四连+1或5的组合
+  const fourOfAKindWithOneOrFive = findFourOfAKindWithOneOrFive(dice, unlockedDice);
+  if (fourOfAKindWithOneOrFive) {
+    // 使用现有的shouldRoll逻辑决定是否重掷
+    return { shouldRoll: shouldRoll(), selectedDiceIndices: fourOfAKindWithOneOrFive };
+  }
+  
+  // 新增策略：当骰子数量≥5且没有高分组合时，考虑只取走单个1或5
+  if (unlockedDice.length >= 5 && bestSelection.score < 300) {
+    // 检查是否有1或5
+    const hasOneOrFive = unlockedDice.some(die => die.value === 1 || die.value === 5);
+    
+    if (hasOneOrFive) {
+      // 根据难度决定是否采用这个策略
+      const useThisStrategy = Math.random() < (
+        difficulty === 'easy' ? 0.5 :
+        difficulty === 'medium' ? 0.7 :
+        0.95 // 困难模式
+      );
+      
+      if (useThisStrategy) {
+        const singleOneOrFiveIndices = findSingleOneOrFiveIndices(dice, unlockedDice);
+        if (singleOneOrFiveIndices.length > 0) {
+          return { shouldRoll: true, selectedDiceIndices: singleOneOrFiveIndices };
+        }
+      }
+    }
+  }
+  
   // 如果有四连或更多，优先选择它们
   if (hasFourOfAKind(unlockedDice)) {
     const valueCounts = new Map<number, number>();
@@ -319,7 +401,38 @@ export const computerDecision = (
       }
     });
     
-    // 选择所有这个点数的骰子
+    // 检查是否有1或5（且不是四连的点数）
+    const hasOne = maxValue !== 1 && valueCounts.has(1) && (valueCounts.get(1) ?? 0) > 0;
+    const hasFive = maxValue !== 5 && valueCounts.has(5) && (valueCounts.get(5) ?? 0) > 0;
+    
+    // 如果有1或5，选择四连加1或5
+    if (hasOne || hasFive) {
+      const selectedIndices: number[] = [];
+      
+      // 先添加所有四连的骰子
+      unlockedDice.forEach(die => {
+        if (die.value === maxValue) {
+          selectedIndices.push(dice.findIndex(d => d.id === die.id));
+        }
+      });
+      
+      // 然后添加1或5（优先添加1）
+      if (hasOne) {
+        const oneIndex = unlockedDice.findIndex(die => die.value === 1);
+        if (oneIndex !== -1) {
+          selectedIndices.push(dice.findIndex(d => d.id === unlockedDice[oneIndex].id));
+        }
+      } else if (hasFive) {
+        const fiveIndex = unlockedDice.findIndex(die => die.value === 5);
+        if (fiveIndex !== -1) {
+          selectedIndices.push(dice.findIndex(d => d.id === unlockedDice[fiveIndex].id));
+        }
+      }
+      
+      return { shouldRoll: shouldRoll(), selectedDiceIndices: selectedIndices };
+    }
+    
+    // 如果没有1或5，只选择四连
     const fourOfAKindIndices = unlockedDice
       .filter(die => die.value === maxValue)
       .map(die => dice.findIndex(d => d.id === die.id));
