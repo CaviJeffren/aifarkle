@@ -209,6 +209,25 @@ export const computerDecision = (
     return { shouldRoll: false, selectedDiceIndices: [] };
   }
   
+  // 优化选择策略：优先选择能锁定更多骰子的组合
+  bestSelections.sort((a, b) => {
+    // 首先按照锁定骰子数量排序（降序）
+    if (b.diceCount !== a.diceCount) {
+      return b.diceCount - a.diceCount;
+    }
+    // 其次按照分数排序（降序）
+    return b.score - a.score;
+  });
+  
+  const bestSelection = bestSelections[0];
+  
+  // 新增：检查锁定选中的骰子后是否能达到目标分数
+  // 如果当前总分 + 当前回合分数 + 选中骰子的分数 >= 目标分数，则直接结束回合
+  if (totalScore + turnScore + bestSelection.score >= targetScore) {
+    console.log('电脑检测到可以获胜，选择结束回合');
+    return { shouldRoll: false, selectedDiceIndices: bestSelection.indices };
+  }
+  
   // 如果所有未锁定的骰子都是有效组合，一定要选择锁定并重掷
   if (checkAllUnlockedDiceValid(dice)) {
     const allIndices = unlockedDice.map(die => dice.findIndex(d => d.id === die.id));
@@ -230,18 +249,6 @@ export const computerDecision = (
       return { shouldRoll: true, selectedDiceIndices: allIndices };
     }
   }
-  
-  // 优化选择策略：优先选择能锁定更多骰子的组合
-  bestSelections.sort((a, b) => {
-    // 首先按照锁定骰子数量排序（降序）
-    if (b.diceCount !== a.diceCount) {
-      return b.diceCount - a.diceCount;
-    }
-    // 其次按照分数排序（降序）
-    return b.score - a.score;
-  });
-  
-  const bestSelection = bestSelections[0];
   
   // 根据难度设置基础风险阈值
   const baseRiskThresholds = {

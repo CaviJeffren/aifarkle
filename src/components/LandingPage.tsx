@@ -3,6 +3,7 @@ import { Container, Row, Col, Button, Image } from 'react-bootstrap';
 import GameRules from './GameRules';
 import GameSettings from './GameSettings';
 import BettingPanel from './BettingPanel';
+import ChallengerSelector, { Challenger } from './ChallengerSelector';
 import { GameSettings as GameSettingsType } from '../types';
 import '../styles/LandingPage.css';
 import diceIcon from '../assets/dice-coin.png';
@@ -15,6 +16,7 @@ interface LandingPageProps {
   playerGroschen: number;
   onOpenDiceSelector: () => void;
   onOpenDiceShop: () => void;
+  onStartChallengerGame?: (challenger: Challenger) => void;
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({
@@ -24,10 +26,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
   initialSettings,
   playerGroschen,
   onOpenDiceSelector,
-  onOpenDiceShop
+  onOpenDiceShop,
+  onStartChallengerGame
 }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showBetting, setShowBetting] = useState(false);
+  const [showChallengerSelector, setShowChallengerSelector] = useState(false);
   const [settings, setSettings] = useState<GameSettingsType>(initialSettings);
   
   const handleStartClick = () => {
@@ -43,6 +47,17 @@ const LandingPage: React.FC<LandingPageProps> = ({
   const handleSaveSettings = (newSettings: GameSettingsType) => {
     setSettings(newSettings);
     onSaveSettings(newSettings);
+  };
+  
+  const handleChallengerClick = () => {
+    setShowChallengerSelector(true);
+  };
+  
+  const handleSelectChallenger = (challenger: Challenger) => {
+    if (onStartChallengerGame) {
+      onStartChallengerGame(challenger);
+    }
+    setShowChallengerSelector(false);
   };
   
   return (
@@ -66,7 +81,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
             <p>玩家余额: <span className="groschen-amount">{playerGroschen}</span> 格罗申</p>
           </div>
           
-          {!showBetting ? (
+          {showChallengerSelector ? (
+            <ChallengerSelector 
+              onSelectChallenger={handleSelectChallenger}
+              onCancel={() => setShowChallengerSelector(false)}
+            />
+          ) : !showBetting ? (
             <div className="landing-buttons">
               <Button 
                 variant="kcd" 
@@ -74,6 +94,14 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 onClick={handleStartClick}
               >
                 开始游戏
+              </Button>
+              
+              <Button 
+                variant="kcd" 
+                className="kcd-button kcd-button-secondary landing-button"
+                onClick={handleChallengerClick}
+              >
+                挑战者
               </Button>
               
               <Button 

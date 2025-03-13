@@ -1,0 +1,151 @@
+.challenger-selector {
+  padding: 2rem 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  margin-top: 2rem;
+}
+
+.challenger-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  color: #f1c40f;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.challenger-subtitle {
+  color: #f1f0ec;
+  font-family: 'Merriweather', serif;
+  margin-bottom: 1.5rem;
+}
+
+.challenger-cards {
+  margin-bottom: 1.5rem;
+}
+
+.challenger-card {
+  background-color: #382d1e;
+  border: 2px solid #34495e;
+  transition: all 0.3s ease;
+  height: 100%;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.challenger-card .card-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem;
+}
+
+.challenger-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  border-color: #f1c40f;
+}
+
+.challenger-card.selected {
+  border: 2px solid #f1c40f;
+  box-shadow: 0 0 15px #f1c40f;
+  transform: translateY(-3px);
+}
+
+.challenger-name {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  color: #ecf0f1;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.difficulty-badge {
+  margin-bottom: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  display: inline-block;
+  width: fit-content;
+}
+
+.challenger-description {
+  color: #7a8186;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  flex-grow: 1;
+  min-height: 60px;
+}
+
+.dice-combo {
+  color: #f1c40f;
+  font-size: 0.85rem;
+  border-top: 1px solid #34495e;
+  padding-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.target-score {
+  color: #3498db;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid #34495e;
+}
+
+
+/* 响应式调整 */
+@media (max-width: 992px) {
+  .challenger-card {
+    margin-bottom: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .challenger-selector {
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .challenger-description {
+    min-height: auto;
+  }
+}
+
+/* 按钮样式 */
+.action-buttons {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.action-buttons .kcd-button {
+  min-width: 120px;
+  margin-bottom: 0.5rem;
+}
+
+.challenge-btn {
+  margin-right: 1rem;
+}
+
+@media (max-width: 768px) {
+  .action-buttons {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .action-buttons .kcd-button {
+    margin: 0.5rem 0;
+    width: 80%;
+    max-width: 200px;
+  }
+  
+  .challenge-btn {
+    margin-right: 0;
+  }
+} 

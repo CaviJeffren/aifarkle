@@ -211,7 +211,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     type: DiceType.EVEN,
     name: '偶数骰子',
     description: '更容易出偶数的骰子',
-    price: 40,
+    price: 44,
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.09, // 9%几率获得
@@ -231,7 +231,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     type: DiceType.ODD,
     name: '奇数骰子',
     description: '更容易出奇数的骰子',
-    price: 40,
+    price: 55,
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.08, // 8%几率获得
@@ -351,7 +351,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     type: DiceType.SMALL_LUCKY,
     name: '小幸运骰子',
     description: '容易出1和5，但数量有限',
-    price: 777,
+    price: 77,
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.07, // 7%几率获得
@@ -370,12 +370,12 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.MINI]: {
     type: DiceType.MINI,
     name: 'mini骰子',
-    description: '名称与外观不符',
+    description: '名称与外观不符，容易出1和6',
     price: 50,
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.05, // 5%几率获得
-    maxOwned: 6,
+    maxOwned: 2,
     backgroundColor: '#95a5a6',
     textColor: '#000000',
     probabilities: {
@@ -410,7 +410,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.RIGGED]: {
     type: DiceType.RIGGED,
     name: '动过手脚的骰子',
-    description: '最基础的出千骰子',
+    description: '最基础的出千骰子，容易出2',
     price: 50,
     canBeSold: true,
     canBePurchased: true,

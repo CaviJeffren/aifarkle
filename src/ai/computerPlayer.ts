@@ -37,6 +37,32 @@ export class ComputerPlayer {
       difficulty
     );
 
+    // 添加日志，便于调试
+    console.log('电脑决策:', {
+      shouldRoll,
+      selectedDiceIndices,
+      turnScore,
+      totalScore,
+      targetScore,
+      difficulty
+    });
+
+    // 计算选中骰子的分数
+    if (selectedDiceIndices.length > 0) {
+      const testDice = dice.map((die, index) => ({
+        ...die,
+        selected: selectedDiceIndices.includes(index)
+      }));
+      const selectionScore = calculateSelectionScore(testDice);
+      console.log('选中骰子分数:', selectionScore);
+      console.log('选中后总分:', totalScore + turnScore + selectionScore);
+      
+      // 如果选中后总分超过目标分数，确保结束回合
+      if (totalScore + turnScore + selectionScore >= targetScore) {
+        console.log('选中后总分超过目标分数，确保结束回合');
+      }
+    }
+
     // 如果没有可选的骰子，直接执行决策
     if (selectedDiceIndices.length === 0) {
       setTimeout(() => {
