@@ -249,6 +249,7 @@ interface ChallengerMode {
   isActive: boolean;
   challenger: Challenger | null;
   challengerDiceConfig: DiceType[]; // 挑战者的骰子配置
+  challengerTargetScore: number; // 挑战者的目标分数
 }
 
 const Game: React.FC = () => {
@@ -616,7 +617,7 @@ const Game: React.FC = () => {
         });
         
         // 检查游戏是否结束
-        const isGameOver = totalScore >= prevState.settings.targetScore;
+        const isGameOver = totalScore >= (challengerMode.isActive ? challengerMode.challengerTargetScore : prevState.settings.targetScore);
         
         if (isGameOver) {
           console.log('游戏结束前格罗申:', newPlayers[0].groschen);
@@ -644,8 +645,8 @@ const Game: React.FC = () => {
           // 处理游戏结束逻辑
           setTimeout(() => handleGameOver(playerIndex), 100);
           
-          // 尝试获得特殊骰子
-          if (playerIndex === 0) {
+          // 尝试获得特殊骰子 - 仅在非挑战者模式下
+          if (playerIndex === 0 && !challengerMode.isActive) {
             const rewardDiceType = getRandomRewardDice();
             
             if (rewardDiceType) {
@@ -768,7 +769,7 @@ const Game: React.FC = () => {
             gameState.dice,
             currentPlayer.turnScore,
             currentPlayer.score,
-            gameState.settings.targetScore,
+            challengerMode.isActive ? challengerMode.challengerTargetScore : gameState.settings.targetScore,
             gameState.settings.computerDifficulty,
             selectDice,
             handleRoll,
@@ -997,7 +998,8 @@ const Game: React.FC = () => {
     setChallengerMode({
       isActive: false,
       challenger: null,
-      challengerDiceConfig: []
+      challengerDiceConfig: [],
+      challengerTargetScore: 0
     });
     
     setShowGameScreen(false);
@@ -1204,7 +1206,8 @@ const Game: React.FC = () => {
   const [challengerMode, setChallengerMode] = useState<ChallengerMode>({
     isActive: false,
     challenger: null,
-    challengerDiceConfig: []
+    challengerDiceConfig: [],
+    challengerTargetScore: 0
   });
   
   // 修改处理挑战者游戏开始的函数
@@ -1212,20 +1215,21 @@ const Game: React.FC = () => {
     // 使用ChallengerModel获取挑战者骰子配置
     const challengerDiceConfig = getChallengerDiceConfig(challenger.id);
     
+    // 从挑战者模型中获取目标分数
+    const challengerTargetScore = getChallengerTargetScore(challenger.id);
+    
     // 设置挑战者模式
     setChallengerMode({
       isActive: true,
       challenger,
-      challengerDiceConfig
+      challengerDiceConfig,
+      challengerTargetScore
     });
     
-    // 从挑战者模型中获取目标分数
-    const targetScore = getChallengerTargetScore(challenger.id);
-    
+    // 只修改电脑难度，不修改目标分数
     const newSettings = {
       ...gameState.settings,
-      computerDifficulty: challenger.difficulty,
-      targetScore: targetScore
+      computerDifficulty: challenger.difficulty
     };
     
     // 更新游戏状态
@@ -1243,7 +1247,7 @@ const Game: React.FC = () => {
             score: 0, 
             turnScore: 0, 
             isComputer: false, 
-            groschen: prevState.players[0].groschen,
+            groschen: prevState.players[0].groschen, // 保持玩家的格罗申不变
             ownedDice: prevState.players[0].ownedDice // 保持玩家拥有的骰子
           },
           { 
@@ -1255,21 +1259,10 @@ const Game: React.FC = () => {
             ownedDice: [DiceType.NORMAL]
           }
         ],
-        bet: 50 // 挑战者模式默认下注50格罗申
+        bet: 0 // 挑战者模式不需要下注格罗申
       };
       
-      // 使用 GroschenService 减少格罗申
-      const updatedPlayer = GroschenService.reduceGroschen(
-        newState.players[0],
-        newState.diceConfigs,
-        50, // 挑战者模式默认下注50格罗申
-        `挑战 ${challenger.name}`,
-        newSettings
-      );
-      
-      // 更新玩家状态
-      newState.players[0] = updatedPlayer;
-      
+      // 挑战者模式不扣除格罗申
       return newState;
     });
     
