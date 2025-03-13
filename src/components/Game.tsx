@@ -186,6 +186,15 @@ const checkForPossibleScoring = (dice: Array<{id: number; value: number; selecte
 
   // 调试信息
   console.log('检查可能的得分组合，未锁定的骰子:', unlockedDice.map(d => d.value).join(', '));
+  
+  // 特殊规则：检测224436组合，如果是这个组合则视为farkle
+  if (unlockedDice.length === 6) {
+    const values = unlockedDice.map(die => die.value).sort((a, b) => a - b);
+    if (JSON.stringify(values) === JSON.stringify([2, 2, 3, 4, 4, 6])) {
+      console.log('检测到特殊组合224436，视为farkle');
+      return false;
+    }
+  }
 
   // 1. 检查单个骰子是否有1或5 - 这是最基本的得分组合
   const onesCount = unlockedDice.filter(die => die.value === 1).length;

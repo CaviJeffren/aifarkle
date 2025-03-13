@@ -154,7 +154,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     price: 20,
     canBeSold: true,
     canBePurchased: false, // 只能通过获胜奖励获得
-    dropRate: 0.005, // 0.5%几率获得
+    dropRate: 0.001, // 0.5%几率获得
     maxOwned: 1,
     backgroundColor: '#3498db',
     textColor: '#ffffff',
