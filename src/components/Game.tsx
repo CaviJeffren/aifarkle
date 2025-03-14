@@ -695,6 +695,8 @@ const Game: React.FC = () => {
                 
                 // 设置奖励骰子状态，用于显示弹窗
                 setRewardDice(rewardDiceType);
+                
+                console.log(`普通模式获得特殊骰子: ${getDiceName(rewardDiceType)}`);
               }
             }
           }
@@ -993,6 +995,40 @@ const Game: React.FC = () => {
   
   // 处理关闭恭喜获得特殊骰子弹窗
   const handleCloseRewardModal = () => {
+    // 在关闭弹窗前，确保特殊骰子已经被添加到玩家的拥有骰子列表中
+    if (rewardDice) {
+      // 更新玩家拥有的骰子
+      setGameState(prevState => {
+        // 检查玩家是否已经拥有这个骰子（可能在之前的逻辑中已经添加）
+        const alreadyOwned = prevState.players[0].ownedDice.includes(rewardDice);
+        
+        if (!alreadyOwned) {
+          // 如果还没有添加，则添加到玩家的骰子列表中
+          const newOwnedDice = [...prevState.players[0].ownedDice, rewardDice];
+          
+          // 使用GroschenService更新玩家拥有的骰子
+          const updatedPlayer = GroschenService.updateOwnedDice(
+            prevState.players[0],
+            prevState.diceConfigs,
+            newOwnedDice,
+            `获得${getDiceName(rewardDice)}骰子`
+          );
+          
+          console.log(`保存特殊骰子奖励: ${getDiceName(rewardDice)}`);
+          
+          return {
+            ...prevState,
+            players: [
+              updatedPlayer,
+              ...prevState.players.slice(1)
+            ]
+          };
+        }
+        
+        return prevState;
+      });
+    }
+    
     setShowRewardModal(false);
     setRewardDice(null); // 重置奖励骰子状态
     
@@ -1237,9 +1273,19 @@ const Game: React.FC = () => {
   // 在游戏结束时保存完整的用户数据
   useEffect(() => {
     if (gameState.phase === GamePhase.GAME_OVER) {
-      saveUserData(gameState.players[0], gameState.diceConfigs);
+      // 确保保存最新的用户数据，包括格罗申和拥有的骰子
+      saveUserData(
+        gameState.players[0], 
+        gameState.diceConfigs, 
+        gameState.settings
+      );
+      console.log('游戏结束，保存用户数据:', {
+        groschen: gameState.players[0].groschen,
+        ownedDice: gameState.players[0].ownedDice.length,
+        settings: gameState.settings
+      });
     }
-  }, [gameState.phase]);
+  }, [gameState.phase, gameState.players, gameState.diceConfigs, gameState.settings]);
 
   // 添加挑战者模式状态
   const [challengerMode, setChallengerMode] = useState<ChallengerMode>({
@@ -1356,11 +1402,14 @@ const Game: React.FC = () => {
           '游戏胜利奖励'
         );
         
-        // 更新玩家状态
+        // 更新玩家状态，但不改变游戏阶段和分数
         setGameState(prevState => ({
           ...prevState,
           players: [
-            updatedPlayer,
+            {
+              ...updatedPlayer,
+              score: prevState.players[0].score // 保持原有分数不变
+            },
             ...prevState.players.slice(1)
           ]
         }));
@@ -1399,11 +1448,14 @@ const Game: React.FC = () => {
               `获得${getDiceName(rewardDiceType)}骰子`
             );
             
-            // 更新玩家状态
+            // 更新玩家状态，但不改变游戏阶段和分数
             setGameState(prevState => ({
               ...prevState,
               players: [
-                playerWithNewDice,
+                {
+                  ...playerWithNewDice,
+                  score: prevState.players[0].score // 保持原有分数不变
+                },
                 ...prevState.players.slice(1)
               ]
             }));
@@ -1411,13 +1463,20 @@ const Game: React.FC = () => {
             // 设置奖励骰子状态，用于显示弹窗
             setRewardDice(rewardDiceType);
             
+            // 确保骰子数据被保存到本地存储
+            updateUserOwnedDice(newOwnedDice);
+            console.log(`挑战者模式获得特殊骰子: ${getDiceName(rewardDiceType)}`);
+
             content += `\n恭喜！你战胜了${challengerMode.challenger.name}，获得了特殊骰子：${getDiceName(rewardDiceType)}！\n`;
           } else {
-            // 即使没有获得新骰子，也要更新玩家状态以确保格罗申奖励生效
+            // 即使没有获得新骰子，也要更新玩家状态以确保格罗申奖励生效，但不改变游戏阶段和分数
             setGameState(prevState => ({
               ...prevState,
               players: [
-                updatedPlayer,
+                {
+                  ...updatedPlayer,
+                  score: prevState.players[0].score // 保持原有分数不变
+                },
                 ...prevState.players.slice(1)
               ]
             }));
@@ -1425,11 +1484,14 @@ const Game: React.FC = () => {
             content += `\n恭喜！你战胜了${challengerMode.challenger.name}！\n`;
           }
         } else {
-          // 即使没有获得骰子奖励，也要更新玩家状态以确保格罗申奖励生效
+          // 即使没有获得骰子奖励，也要更新玩家状态以确保格罗申奖励生效，但不改变游戏阶段和分数
           setGameState(prevState => ({
             ...prevState,
             players: [
-              updatedPlayer,
+              {
+                ...updatedPlayer,
+                score: prevState.players[0].score // 保持原有分数不变
+              },
               ...prevState.players.slice(1)
             ]
           }));
@@ -1449,12 +1511,7 @@ const Game: React.FC = () => {
     });
     setShowModal(true);
     
-    // 更新游戏状态
-    setGameState(prevState => ({
-      ...prevState,
-      phase: GamePhase.GAME_OVER,
-      winner: gameState.players[playerIndex]
-    }));
+    // 不再重新设置游戏状态为GAME_OVER，因为在calculateAndUpdateScore中已经设置了
   };
 
   return (
