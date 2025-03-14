@@ -211,7 +211,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     type: DiceType.EVEN,
     name: '偶数骰子',
     description: '更容易出偶数的骰子',
-    price: 44,
+    price: 88,
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.09, // 9%几率获得
@@ -231,7 +231,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     type: DiceType.ODD,
     name: '奇数骰子',
     description: '更容易出奇数的骰子',
-    price: 55,
+    price: 99,
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.08, // 8%几率获得
@@ -270,7 +270,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.DEMON_LU]: {
     type: DiceType.DEMON_LU,
     name: '卢骰子',
-    description: '恶魔三骰之"卢"',
+    description: '恶魔三骰之"卢"，容易出6',
     price: 111,
     canBeSold: true,
     canBePurchased: false,
@@ -290,7 +290,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.DEMON_XI]: {
     type: DiceType.DEMON_XI,
     name: '西骰子',
-    description: '恶魔三骰之"西"',
+    description: '恶魔三骰之"西"，容易出6',
     price: 222,
     canBeSold: true,
     canBePurchased: false,
@@ -310,7 +310,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.DEMON_FA]: {
     type: DiceType.DEMON_FA,
     name: '法骰子',
-    description: '恶魔三骰之"法"',
+    description: '恶魔三骰之"法"，容易出6',
     price: 333,
     canBeSold: true,
     canBePurchased: false,
@@ -390,7 +390,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.CLOTHED]: {
     type: DiceType.CLOTHED,
     name: '穿衣骰子',
-    description: '听说用了之后会让舞娘不停穿衣服',
+    description: '容易出156，让人穿衣服',
     price: 50,
     canBeSold: true,
     canBePurchased: false,
@@ -510,7 +510,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.ANGEL_AN]: {
     type: DiceType.ANGEL_AN,
     name: '安骰子',
-    description: '天使三骰之"安"',
+    description: '天使三骰之"安"，容易出6',
     price: 111,
     canBeSold: true,
     canBePurchased: false,
@@ -530,7 +530,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.ANGEL_JI]: {
     type: DiceType.ANGEL_JI,
     name: '吉骰子',
-    description: '天使三骰之"吉"',
+    description: '天使三骰之"吉"，容易出6',
     price: 222,
     canBeSold: true,
     canBePurchased: false,
@@ -550,7 +550,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.ANGEL_LA]: {
     type: DiceType.ANGEL_LA,
     name: '拉骰子',
-    description: '天使三骰之"拉"',
+    description: '天使三骰之"拉"，容易出6',
     price: 333,
     canBeSold: true,
     canBePurchased: false,

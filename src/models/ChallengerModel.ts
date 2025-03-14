@@ -152,6 +152,23 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     rewardDice: [DiceType.CAVI_C],
     rewardProbability: 0.6 // 60%概率获得
   },
+  'heaven-knight': {
+    id: 'heaven-knight',
+    name: '天国骑士团（new）',
+    description: '手上拿着来自天国的骰子',
+    difficulty: 'medium',
+    diceTypes: [
+      DiceType.HEAVEN,
+      DiceType.HEAVEN,
+      DiceType.HEAVEN,
+      DiceType.HEAVEN,
+      DiceType.HEAVEN,
+      DiceType.HEAVEN
+    ],
+    targetScore: 8000,
+    rewardDice: [DiceType.HEAVEN],
+    rewardProbability: 0.6 // 40%概率获得
+  },
   'alonso': {
     id: 'alonso',
     name: '阿隆索大人',

@@ -358,6 +358,14 @@ const Game: React.FC = () => {
   
   // 开始新游戏
   const handleStartGame = () => {
+    // 重置挑战者模式
+    setChallengerMode({
+      isActive: false,
+      challenger: null,
+      challengerDiceConfig: [],
+      challengerTargetScore: 0
+    });
+    
     setShowGameScreen(true);
     setGameState(prevState => {
       const newState = {
@@ -489,9 +497,27 @@ const Game: React.FC = () => {
         
         // 如果所有骰子都被锁定，重新初始化所有骰子
         if (unlockedCount === 0 || updatedDice.every(die => die.locked)) {
+          const newInitializedDice = initializeDiceWithConfig();
+          
+          // 检查新掷出的骰子是否构成farkle
+          const hasPossibleScoring = checkForPossibleScoring(newInitializedDice);
+          
+          if (!hasPossibleScoring) {
+            return {
+              ...prevState,
+              dice: newInitializedDice,
+              phase: GamePhase.END_TURN,
+              isFarkle: true,
+              players: prevState.players.map((player, idx) => ({
+                ...player,
+                turnScore: idx === prevState.currentPlayerIndex ? 0 : player.turnScore
+              }))
+            };
+          }
+          
           return {
             ...prevState,
-            dice: initializeDiceWithConfig(),
+            dice: newInitializedDice,
             players: newPlayers,
             phase: GamePhase.SELECT
           };
@@ -825,6 +851,14 @@ const Game: React.FC = () => {
   const handlePlaceBet = (amount: number) => {
     console.log('下注前格罗申:', gameState.players[0].groschen);
     console.log('下注金额:', amount);
+    
+    // 重置挑战者模式
+    setChallengerMode({
+      isActive: false,
+      challenger: null,
+      challengerDiceConfig: [],
+      challengerTargetScore: 0
+    });
     
     setGameState(prevState => {
       // 使用 GroschenService 减少格罗申
@@ -1172,7 +1206,7 @@ const Game: React.FC = () => {
         type: challengerMode.challengerDiceConfig[index]
       }));
     } else {
-      // 否则使用玩家的骰子配置
+      // 否则使用玩家的骰子配置，确保电脑始终使用普通骰子
       return Array(6).fill(null).map((_, index) => ({
         id: Math.random(),
         value: rollDie(gameState.currentPlayerIndex === 0 ? gameState.diceConfigs.diceConfigs[index] : DiceType.NORMAL),
