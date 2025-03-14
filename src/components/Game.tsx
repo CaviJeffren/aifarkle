@@ -1480,7 +1480,7 @@ const Game: React.FC = () => {
             
             console.log(`挑战者模式获得特殊骰子: ${getDiceName(rewardDiceType)}, 最大拥有数量: ${maxOwnedDiceOfType}, 当前拥有: ${ownedDiceOfType}`);
 
-            content += `\n恭喜！你战胜了${challengerMode.challenger.name}，获得了他的特殊骰子：${getDiceName(rewardDiceType)}！`;
+            content += `\n并获得了他的特殊骰子：${getDiceName(rewardDiceType)}！`;
             // 添加当前格罗申余额信息
             content += `\n你当前拥有${playerWithNewDice.groschen}格罗申。`;
           } else {
