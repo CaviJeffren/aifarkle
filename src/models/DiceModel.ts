@@ -217,7 +217,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.09, // 9%几率获得
-    maxOwned: 6,
+    maxOwned: 99,
     backgroundColor: '#3498db',
     textColor: '#000000',
     probabilities: {
@@ -237,7 +237,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.08, // 8%几率获得
-    maxOwned: 6,
+    maxOwned: 99,
     backgroundColor: '#e74c3c',
     textColor: '#000000',
     probabilities: {
@@ -373,7 +373,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     type: DiceType.MINI,
     name: 'mini骰子',
     description: '名称与外观不符，容易出1和6',
-    price: 50,
+    price: 216,
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.05, // 5%几率获得
@@ -397,7 +397,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: false,
     dropRate: 0.05, // 5%几率获得
-    maxOwned: 6,
+    maxOwned: 99,
     backgroundColor: '#e67e22',
     textColor: '#ffffff',
     probabilities: {
@@ -417,7 +417,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.1, // 10%几率获得
-    maxOwned: 6,
+    maxOwned: 99,
     backgroundColor: '#7f8c8d',
     textColor: '#000000',
     probabilities: {
@@ -437,7 +437,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.1, // 10%几率获得
-    maxOwned: 6,
+    maxOwned: 99,
     backgroundColor: '#bdc3c7',
     textColor: '#000000',
     probabilities: {
@@ -457,7 +457,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: false,
     dropRate: 0.05, // 5%几率获得
-    maxOwned: 6,
+    maxOwned: 99,
     backgroundColor: '#34495e',
     textColor: '#ffffff',
     probabilities: {
@@ -477,7 +477,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.03, // 3%几率获得
-    maxOwned: 6,
+    maxOwned: 99,
     backgroundColor: '#16a085',
     textColor: '#000000',
     probabilities: {
@@ -497,7 +497,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.1, // 10%几率获得
-    maxOwned: 6,
+    maxOwned: 99,
     backgroundColor: '#1abc9c',
     textColor: '#000000',
     probabilities: {

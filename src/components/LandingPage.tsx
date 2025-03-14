@@ -85,6 +85,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
             <ChallengerSelector 
               onSelectChallenger={handleSelectChallenger}
               onCancel={() => setShowChallengerSelector(false)}
+              playerGroschen={playerGroschen}
             />
           ) : !showBetting ? (
             <div className="landing-buttons">

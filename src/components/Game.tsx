@@ -56,7 +56,8 @@ import {
   getChallengerName,
   getChallengerDifficulty,
   getChallengerTargetScore,
-  getRandomChallengerRewardDice
+  getRandomChallengerRewardDice,
+  getChallengerBetAmount
 } from '../models/ChallengerModel';
 
 const initialSettings: GameSettingsType = {
@@ -253,12 +254,13 @@ const checkForPossibleScoring = (dice: Array<{id: number; value: number; selecte
   return false;
 };
 
-// 挑战者模式相关类型
+// 挑战者模式接口
 interface ChallengerMode {
   isActive: boolean;
   challenger: Challenger | null;
   challengerDiceConfig: DiceType[]; // 挑战者的骰子配置
   challengerTargetScore: number; // 挑战者的目标分数
+  betAmount: number; // 挑战者的下注金额
 }
 
 const Game: React.FC = () => {
@@ -959,7 +961,8 @@ const Game: React.FC = () => {
       isActive: false,
       challenger: null,
       challengerDiceConfig: [],
-      challengerTargetScore: 0
+      challengerTargetScore: 0,
+      betAmount: 0
     });
   };
 
@@ -1034,7 +1037,8 @@ const Game: React.FC = () => {
       isActive: false,
       challenger: null,
       challengerDiceConfig: [],
-      challengerTargetScore: 0
+      challengerTargetScore: 0,
+      betAmount: 0
     });
     
     setShowGameScreen(false);
@@ -1242,23 +1246,38 @@ const Game: React.FC = () => {
     isActive: false,
     challenger: null,
     challengerDiceConfig: [],
-    challengerTargetScore: 0
+    challengerTargetScore: 0,
+    betAmount: 0
   });
   
   // 修改处理挑战者游戏开始的函数
   const handleStartChallengerGame = (challenger: Challenger) => {
+    // 检查玩家是否有足够的格罗申
+    if (gameState.players[0].groschen < (challenger.betAmount || 0)) {
+      setModalContent({
+        title: '格罗申不足',
+        content: `你没有足够的格罗申来挑战${challenger.name}！需要${challenger.betAmount}格罗申。`
+      });
+      setShowModal(true);
+      return;
+    }
+
     // 使用ChallengerModel获取挑战者骰子配置
     const challengerDiceConfig = getChallengerDiceConfig(challenger.id);
     
     // 从挑战者模型中获取目标分数
     const challengerTargetScore = getChallengerTargetScore(challenger.id);
     
+    // 获取下注金额
+    const betAmount = challenger.betAmount || getChallengerBetAmount(challenger.id);
+    
     // 设置挑战者模式
     setChallengerMode({
       isActive: true,
       challenger,
       challengerDiceConfig,
-      challengerTargetScore
+      challengerTargetScore,
+      betAmount
     });
     
     // 只修改电脑难度，不修改目标分数
@@ -1294,10 +1313,19 @@ const Game: React.FC = () => {
             ownedDice: [DiceType.NORMAL]
           }
         ],
-        bet: 0 // 挑战者模式不需要下注格罗申
+        bet: betAmount // 设置挑战者模式的下注金额
       };
       
-      // 挑战者模式不扣除格罗申
+      // 扣除玩家的格罗申
+      const updatedPlayer = GroschenService.reduceGroschen(
+        newState.players[0],
+        prevState.diceConfigs,
+        betAmount,
+        `挑战${challenger.name}`
+      );
+      
+      newState.players[0] = updatedPlayer;
+      
       return newState;
     });
     
@@ -1318,65 +1346,99 @@ const Game: React.FC = () => {
         // 玩家获胜，获得下注金额的两倍
         // 注意：这里不再更新玩家的格罗申，只显示信息
         const betReward = gameState.bet * 2;
-        content += `赢得${betReward}格罗申\n当前余额：${gameState.players[0].groschen+betReward}格罗申`;
+        content += `\n你赢得了${betReward}格罗申！`;
         
-        // 重置下注金额
+        // 更新玩家的格罗申
+        const updatedPlayer = GroschenService.addGroschen(
+          player,
+          gameState.diceConfigs,
+          betReward,
+          '游戏胜利奖励'
+        );
+        
+        // 更新玩家状态
         setGameState(prevState => ({
           ...prevState,
-          bet: 0 // 重置下注金额
-        }));
-      } else {
-        // 电脑获胜，玩家输掉下注金额
-        content += `输掉${gameState.bet}格罗申\n当前余额：${gameState.players[0].groschen}格罗申`;
-        
-        // 下注金额已在开始游戏时扣除，不需要再次扣除
-        setGameState(prevState => ({
-          ...prevState,
-          bet: 0 // 重置下注金额
+          players: [
+            updatedPlayer,
+            ...prevState.players.slice(1)
+          ]
         }));
       }
-    }
-    // 挑战者模式下的处理
-    else if (challengerMode.isActive && challengerMode.challenger) {
+    } else if (challengerMode.isActive && challengerMode.challenger) {
       if (playerIndex === 0) {
-        // 玩家获胜，有机会获得挑战者的特殊骰子
+        // 玩家战胜挑战者，获得下注金额的两倍
+        const betReward = challengerMode.betAmount * 2;
+        content += `\n你战胜了${challengerMode.challenger.name}，赢得了${betReward}格罗申！`;
+        
+        // 更新玩家的格罗申
+        const updatedPlayer = GroschenService.addGroschen(
+          player,
+          gameState.diceConfigs,
+          betReward,
+          `战胜${challengerMode.challenger.name}奖励`
+        );
+        
+        // 检查是否获得特殊骰子奖励
         const rewardDiceType = getRandomChallengerRewardDice(challengerMode.challenger.id);
         
         if (rewardDiceType) {
-          // 检查玩家是否已经达到该骰子的最大拥有数量
-          const ownedCount = gameState.players[0].ownedDice.filter(type => type === rewardDiceType).length;
-          const maxOwned = getDiceMaxOwned(rewardDiceType);
+          // 检查玩家是否已经拥有最大数量的该类型骰子
+          const maxOwnedDiceOfType = 3; // 每种特殊骰子最多拥有3个
+          const ownedDiceOfType = player.ownedDice.filter(d => d === rewardDiceType).length;
           
-          if (ownedCount < maxOwned) {
-            // 玩家获得了特殊骰子
-            setGameState(prevState => {
-              const newPlayers = [...prevState.players];
-              newPlayers[0] = {
-                ...newPlayers[0],
-                ownedDice: [...newPlayers[0].ownedDice, rewardDiceType]
-              };
-              
-              // 立即保存玩家的骰子数据到本地存储
-              updateUserOwnedDice(newPlayers[0].ownedDice);
-              
-              return {
-                ...prevState,
-                players: newPlayers
-              };
-            });
+          if (ownedDiceOfType < maxOwnedDiceOfType) {
+            // 添加特殊骰子到玩家拥有的骰子中
+            const newOwnedDice = [...player.ownedDice, rewardDiceType];
+            
+            // 更新玩家拥有的骰子
+            const playerWithNewDice = GroschenService.updateOwnedDice(
+              updatedPlayer,
+              gameState.diceConfigs,
+              newOwnedDice,
+              `获得${getDiceName(rewardDiceType)}骰子`
+            );
+            
+            // 更新玩家状态
+            setGameState(prevState => ({
+              ...prevState,
+              players: [
+                playerWithNewDice,
+                ...prevState.players.slice(1)
+              ]
+            }));
             
             // 设置奖励骰子状态，用于显示弹窗
             setRewardDice(rewardDiceType);
             
-            content += `恭喜！你战胜了${challengerMode.challenger.name}，获得了特殊骰子：${getDiceName(rewardDiceType)}！\n`;
+            content += `\n恭喜！你战胜了${challengerMode.challenger.name}，获得了特殊骰子：${getDiceName(rewardDiceType)}！\n`;
           } else {
-            content += `恭喜！你战胜了${challengerMode.challenger.name}！\n`;
+            // 即使没有获得新骰子，也要更新玩家状态以确保格罗申奖励生效
+            setGameState(prevState => ({
+              ...prevState,
+              players: [
+                updatedPlayer,
+                ...prevState.players.slice(1)
+              ]
+            }));
+            
+            content += `\n恭喜！你战胜了${challengerMode.challenger.name}！\n`;
           }
         } else {
-          content += `恭喜！你战胜了${challengerMode.challenger.name}！\n`;
+          // 即使没有获得骰子奖励，也要更新玩家状态以确保格罗申奖励生效
+          setGameState(prevState => ({
+            ...prevState,
+            players: [
+              updatedPlayer,
+              ...prevState.players.slice(1)
+            ]
+          }));
+          
+          content += `\n恭喜！你战胜了${challengerMode.challenger.name}！\n`;
         }
       } else {
         content += `${challengerMode.challenger.name}获胜，再接再厉！\n`;
+        content += `你失去了${challengerMode.betAmount}格罗申。`;
       }
     }
     

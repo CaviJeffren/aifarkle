@@ -11,6 +11,7 @@ export interface ChallengerDiceConfig {
   targetScore: number; // 目标分数字段
   rewardDice: DiceType[]; // 奖励特殊骰子列表
   rewardProbability: number; // 获得奖励骰子的概率 (0-1)
+  betAmount: number; // 挑战者的下注金额
 }
 
 // 挑战者数据
@@ -31,7 +32,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 4000,
     rewardDice: [DiceType.ODD],
-    rewardProbability: 0.7 // 70%概率获得
+    rewardProbability: 0.7, // 70%概率获得
+    betAmount: 50 // 下注金额
   },
   'real-gambler': {
     id: 'real-gambler',
@@ -48,7 +50,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 4000,
     rewardDice: [DiceType.ANGEL_AN, DiceType.ANGEL_JI, DiceType.ANGEL_LA],
-    rewardProbability: 0.2 // 20%概率获得
+    rewardProbability: 0.2, // 20%概率获得
+    betAmount: 50 // 下注金额
   },
   'dance-boss': {
     id: 'dance-boss',
@@ -65,7 +68,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 4000,
     rewardDice: [DiceType.CLOTHED],
-    rewardProbability: 0.3 // 30%概率获得
+    rewardProbability: 0.3, // 30%概率获得
+    betAmount: 50 // 下注金额
   },
   'cheater': {
     id: 'cheater',
@@ -82,7 +86,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 4000,
     rewardDice: [DiceType.RIGGED],
-    rewardProbability: 0.4 // 40%概率获得
+    rewardProbability: 0.4, // 40%概率获得
+    betAmount: 50 // 下注金额
   },
   'a-san': {
     id: 'a-san',
@@ -99,7 +104,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 3333,
     rewardDice: [DiceType.TRIPLE_THREE],
-    rewardProbability: 0.33 // 33%概率获得
+    rewardProbability: 0.33, // 33%概率获得
+    betAmount: 33 // 下注金额
   },
   'malcolm': {
     id: 'malcolm',
@@ -116,7 +122,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 6000,
     rewardDice: [DiceType.MINI],
-    rewardProbability: 0.2 // 20%概率获得
+    rewardProbability: 0.2, // 20%概率获得
+    betAmount: 100 // 下注金额
   },
   'merchant': {
     id: 'merchant',
@@ -133,7 +140,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 6000,
     rewardDice: [DiceType.SMALL_LUCKY, DiceType.LUCKY],
-    rewardProbability: 0.3 // 30%概率获得
+    rewardProbability: 0.3, // 30%概率获得
+    betAmount: 180 // 下注金额
   },
   'small-cavier': {
     id: 'small-cavier',
@@ -150,7 +158,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 6000,
     rewardDice: [DiceType.CAVI_C],
-    rewardProbability: 0.6 // 60%概率获得
+    rewardProbability: 0.6, // 60%概率获得
+    betAmount: 30 // 下注金额
   },
   'heaven-knight': {
     id: 'heaven-knight',
@@ -167,7 +176,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 8000,
     rewardDice: [DiceType.HEAVEN],
-    rewardProbability: 0.4 // 40%概率获得
+    rewardProbability: 0.4, // 40%概率获得
+    betAmount: 200 // 下注金额
   },
   'alonso': {
     id: 'alonso',
@@ -184,7 +194,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 8000,
     rewardDice: [DiceType.ADULT],
-    rewardProbability: 0.1 // 10%概率获得
+    rewardProbability: 0.1, // 10%概率获得
+    betAmount: 300 // 下注金额
   },
   'cavier': {
     id: 'cavier',
@@ -201,7 +212,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 8000, // 中等难度目标分数
     rewardDice: [DiceType.CAVIER_1, DiceType.CAVIER_2, DiceType.CAVIER_3, DiceType.CAVIER_4, DiceType.CAVIER_5, DiceType.CAVIER_6], // 奖励骰子
-    rewardProbability: 0.25 // 25%概率获得
+    rewardProbability: 0.25, // 25%概率获得
+    betAmount: 10 // 下注金额
   }
 };
 
@@ -263,4 +275,10 @@ export const getRandomChallengerRewardDice = (challengerId: string): DiceType | 
   // 随机选择一个奖励骰子
   const randomIndex = Math.floor(Math.random() * config.rewardDice.length);
   return config.rewardDice[randomIndex];
+};
+
+// 获取挑战者下注金额
+export const getChallengerBetAmount = (challengerId: string): number => {
+  const config = CHALLENGER_CONFIGS[challengerId];
+  return config ? config.betAmount : 50; // 默认下注金额为50
 }; 

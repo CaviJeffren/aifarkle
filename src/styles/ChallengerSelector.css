@@ -94,9 +94,48 @@
   font-weight: 600;
   margin-top: auto;
   padding-top: 0.5rem;
-  border-top: 1px solid #34495e;
+  margin-bottom: 0;
 }
 
+.challenger-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #34495e;
+  padding-top: 0.5rem;
+  margin-top: auto;
+}
+
+.challenger-info-row .target-score,
+.challenger-info-row .bet-amount {
+  margin: 0;
+  padding: 0;
+  border-top: none;
+}
+
+.bet-amount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e74c3c;
+  margin-bottom: 0;
+}
+
+.challenger-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.challenger-card.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.insufficient-funds {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-top: 5px;
+}
 
 /* 响应式调整 */
 @media (max-width: 992px) {
