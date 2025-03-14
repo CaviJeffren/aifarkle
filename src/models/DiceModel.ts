@@ -79,7 +79,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.001, // 0.1%几率获得
     maxOwned: 1,
     backgroundColor: '#e74c3c',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 1,
       2: 0,
@@ -99,7 +99,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.002, // 0.2%几率获得
     maxOwned: 1,
     backgroundColor: '#e67e22',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0,
       2: 1,
@@ -159,7 +159,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.001, // 0.5%几率获得
     maxOwned: 1,
     backgroundColor: '#3498db',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0,
       2: 0,
@@ -179,7 +179,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.006, // 0.6%几率获得
     maxOwned: 1,
     backgroundColor: '#9b59b6',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0,
       2: 0,
@@ -199,7 +199,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.0005, // 0.05%几率获得
     maxOwned: 6,
     backgroundColor: '#8e44ad',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0.385,
       2: 0.077,
@@ -219,7 +219,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.09, // 9%几率获得
     maxOwned: 6,
     backgroundColor: '#3498db',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0.067,
       2: 0.267,
@@ -239,14 +239,14 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.08, // 8%几率获得
     maxOwned: 6,
     backgroundColor: '#e74c3c',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
-      1: 0.217,
-      2: 0.117,
-      3: 0.217,
-      4: 0.117,
-      5: 0.217,
-      6: 0.117
+      1: 0.207,
+      2: 0.127,
+      3: 0.207,
+      4: 0.127,
+      5: 0.207,
+      6: 0.127
     }
   },
   [DiceType.HEAVEN]: {
@@ -258,8 +258,8 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBePurchased: false,
     dropRate: 0.0004, // 0.04%几率获得
     maxOwned: 4,
-    backgroundColor: '#f1c40f',
-    textColor: '#000000',
+    backgroundColor: '#000000',
+    textColor: '#F2F2F2',
     probabilities: {
       1: 0.368,
       2: 0.105,
@@ -279,7 +279,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.01, // 1%几率获得
     maxOwned: 1,
     backgroundColor: '#c0392b',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0.13,
       2: 0.13,
@@ -299,7 +299,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.02, // 2%几率获得
     maxOwned: 1,
     backgroundColor: '#c0392b',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0.13,
       2: 0.13,
@@ -319,7 +319,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.03, // 3%几率获得
     maxOwned: 1,
     backgroundColor: '#c0392b',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0.13,
       2: 0.13,
@@ -419,7 +419,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.1, // 10%几率获得
     maxOwned: 6,
     backgroundColor: '#7f8c8d',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0.23,
       2: 0.374,
@@ -479,7 +479,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.03, // 3%几率获得
     maxOwned: 6,
     backgroundColor: '#16a085',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0.182,
       2: 0.227,
@@ -579,7 +579,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.03, // 3%几率获得
     maxOwned: 3,
     backgroundColor: '#9b59b6',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0,
       2: 0,
@@ -599,7 +599,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.01, // 1%几率获得
     maxOwned: 2,
     backgroundColor: '#34495e',
-    textColor: '#ffffff',
+    textColor: '#000000',
     probabilities: {
       1: 0.61,
       2: 0.08,

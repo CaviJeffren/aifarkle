@@ -28,57 +28,62 @@ const Die: React.FC<DieProps> = ({ value, type, selected, locked, onClick }) => 
         : '0 2px 5px rgba(0,0,0,0.2)',
   };
 
+  // 点数样式，使用骰子的textColor
+  const dotStyle = {
+    backgroundColor: diceData.textColor
+  };
+
   const getDieFace = (value: number) => {
     switch (value) {
       case 1:
         return (
           <div className="die-dots">
-            <span className="dot center"></span>
+            <span className="dot center" style={dotStyle}></span>
           </div>
         );
       case 2:
         return (
           <div className="die-dots">
-            <span className="dot top-left"></span>
-            <span className="dot bottom-right"></span>
+            <span className="dot top-left" style={dotStyle}></span>
+            <span className="dot bottom-right" style={dotStyle}></span>
           </div>
         );
       case 3:
         return (
           <div className="die-dots">
-            <span className="dot top-left"></span>
-            <span className="dot center"></span>
-            <span className="dot bottom-right"></span>
+            <span className="dot top-left" style={dotStyle}></span>
+            <span className="dot center" style={dotStyle}></span>
+            <span className="dot bottom-right" style={dotStyle}></span>
           </div>
         );
       case 4:
         return (
           <div className="die-dots">
-            <span className="dot top-left"></span>
-            <span className="dot top-right"></span>
-            <span className="dot bottom-left"></span>
-            <span className="dot bottom-right"></span>
+            <span className="dot top-left" style={dotStyle}></span>
+            <span className="dot top-right" style={dotStyle}></span>
+            <span className="dot bottom-left" style={dotStyle}></span>
+            <span className="dot bottom-right" style={dotStyle}></span>
           </div>
         );
       case 5:
         return (
           <div className="die-dots">
-            <span className="dot top-left"></span>
-            <span className="dot top-right"></span>
-            <span className="dot center"></span>
-            <span className="dot bottom-left"></span>
-            <span className="dot bottom-right"></span>
+            <span className="dot top-left" style={dotStyle}></span>
+            <span className="dot top-right" style={dotStyle}></span>
+            <span className="dot center" style={dotStyle}></span>
+            <span className="dot bottom-left" style={dotStyle}></span>
+            <span className="dot bottom-right" style={dotStyle}></span>
           </div>
         );
       case 6:
         return (
           <div className="die-dots">
-            <span className="dot top-left"></span>
-            <span className="dot top-right"></span>
-            <span className="dot middle-left"></span>
-            <span className="dot middle-right"></span>
-            <span className="dot bottom-left"></span>
-            <span className="dot bottom-right"></span>
+            <span className="dot top-left" style={dotStyle}></span>
+            <span className="dot top-right" style={dotStyle}></span>
+            <span className="dot middle-left" style={dotStyle}></span>
+            <span className="dot middle-right" style={dotStyle}></span>
+            <span className="dot bottom-left" style={dotStyle}></span>
+            <span className="dot bottom-right" style={dotStyle}></span>
           </div>
         );
       default:
