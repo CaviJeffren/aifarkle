@@ -25,7 +25,9 @@ export enum DiceType {
   CAVI_C = 'KAVI_C',
   ANGEL_AN = 'ANGEL_AN',
   ANGEL_JI = 'ANGEL_JI',
-  ANGEL_LA = 'ANGEL_LA'
+  ANGEL_LA = 'ANGEL_LA',
+  ANTIOCH = 'ANTIOCH',
+  LOADED = 'LOADED'
 }
 
 // 骰子数据接口
@@ -239,12 +241,12 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     backgroundColor: '#e74c3c',
     textColor: '#ffffff',
     probabilities: {
-      1: 0.237,
-      2: 0.097,
-      3: 0.237,
-      4: 0.097,
-      5: 0.237,
-      6: 0.097
+      1: 0.217,
+      2: 0.117,
+      3: 0.217,
+      4: 0.117,
+      5: 0.217,
+      6: 0.117
     }
   },
   [DiceType.HEAVEN]: {
@@ -565,6 +567,46 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
       4: 0.13,
       5: 0.214,
       6: 0.266
+    }
+  },
+  [DiceType.ANTIOCH]: {
+    type: DiceType.ANTIOCH,
+    name: '圣安提阿克斯的骰子',
+    description: '好像6个面都是3，但也只有3个',
+    price: 3333,
+    canBeSold: true,
+    canBePurchased: true,
+    dropRate: 0.03, // 3%几率获得
+    maxOwned: 3,
+    backgroundColor: '#9b59b6',
+    textColor: '#ffffff',
+    probabilities: {
+      1: 0,
+      2: 0,
+      3: 1,
+      4: 0,
+      5: 0,
+      6: 0
+    }
+  },
+  [DiceType.LOADED]: {
+    type: DiceType.LOADED,
+    name: '灌铅骰子',
+    description: '5的那一面被加了重量',
+    price: 1111,
+    canBeSold: true,
+    canBePurchased: false,
+    dropRate: 0.01, // 1%几率获得
+    maxOwned: 2,
+    backgroundColor: '#34495e',
+    textColor: '#ffffff',
+    probabilities: {
+      1: 0.61,
+      2: 0.08,
+      3: 0.08,
+      4: 0.08,
+      5: 0.08,
+      6: 0.08
     }
   }
 };

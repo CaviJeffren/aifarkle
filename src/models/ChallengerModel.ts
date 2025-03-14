@@ -133,7 +133,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 6000,
     rewardDice: [DiceType.SMALL_LUCKY, DiceType.LUCKY],
-    rewardProbability: 0.2 // 20%概率获得
+    rewardProbability: 0.3 // 30%概率获得
   },
   'small-cavier': {
     id: 'small-cavier',
@@ -167,7 +167,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 8000,
     rewardDice: [DiceType.HEAVEN],
-    rewardProbability: 0.6 // 40%概率获得
+    rewardProbability: 0.4 // 40%概率获得
   },
   'alonso': {
     id: 'alonso',
