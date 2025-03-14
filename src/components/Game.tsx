@@ -693,7 +693,7 @@ const Game: React.FC = () => {
                 // 立即保存玩家的骰子数据到本地存储
                 updateUserOwnedDice(newPlayers[0].ownedDice);
                 
-                // 设置奖励骰子状态，用于显示弹窗
+                // 先设置奖励骰子状态，确保在游戏结束弹窗关闭时能够显示特殊骰子奖励弹窗
                 setRewardDice(rewardDiceType);
                 
                 console.log(`普通模式获得特殊骰子: ${getDiceName(rewardDiceType)}`);
@@ -981,6 +981,7 @@ const Game: React.FC = () => {
     // 如果游戏已结束
     if (gameState.phase === GamePhase.GAME_OVER) {
       console.log('游戏结束时的格罗申:', gameState.players[0].groschen);
+      console.log('游戏结束时是否有奖励骰子:', rewardDice ? getDiceName(rewardDice) : '无');
       
       // 如果玩家获得了特殊骰子，显示恭喜获得特殊骰子的弹窗
       if (rewardDice) {
@@ -1015,6 +1016,9 @@ const Game: React.FC = () => {
           );
           
           console.log(`保存特殊骰子奖励: ${getDiceName(rewardDice)}`);
+          
+          // 确保骰子数据被保存到本地存储
+          updateUserOwnedDice(newOwnedDice);
           
           return {
             ...prevState,
@@ -1413,6 +1417,14 @@ const Game: React.FC = () => {
             ...prevState.players.slice(1)
           ]
         }));
+        
+        // 添加当前格罗申余额信息
+        content += `\n你当前拥有${updatedPlayer.groschen}格罗申。`;
+      } else {
+        // 电脑获胜，玩家失去下注金额
+        content += `\n你失去了${gameState.bet}格罗申。`;
+        // 添加当前格罗申余额信息
+        content += `\n你当前拥有${gameState.players[0].groschen}格罗申。`;
       }
     } else if (challengerMode.isActive && challengerMode.challenger) {
       if (playerIndex === 0) {
@@ -1433,7 +1445,7 @@ const Game: React.FC = () => {
         
         if (rewardDiceType) {
           // 检查玩家是否已经拥有最大数量的该类型骰子
-          const maxOwnedDiceOfType = 3; // 每种特殊骰子最多拥有3个
+          const maxOwnedDiceOfType = getDiceMaxOwned(rewardDiceType);
           const ownedDiceOfType = player.ownedDice.filter(d => d === rewardDiceType).length;
           
           if (ownedDiceOfType < maxOwnedDiceOfType) {
@@ -1448,6 +1460,12 @@ const Game: React.FC = () => {
               `获得${getDiceName(rewardDiceType)}骰子`
             );
             
+            // 先设置奖励骰子状态，确保在游戏结束弹窗关闭时能够显示特殊骰子奖励弹窗
+            setRewardDice(rewardDiceType);
+            
+            // 确保骰子数据被保存到本地存储
+            updateUserOwnedDice(newOwnedDice);
+            
             // 更新玩家状态，但不改变游戏阶段和分数
             setGameState(prevState => ({
               ...prevState,
@@ -1460,14 +1478,11 @@ const Game: React.FC = () => {
               ]
             }));
             
-            // 设置奖励骰子状态，用于显示弹窗
-            setRewardDice(rewardDiceType);
-            
-            // 确保骰子数据被保存到本地存储
-            updateUserOwnedDice(newOwnedDice);
-            console.log(`挑战者模式获得特殊骰子: ${getDiceName(rewardDiceType)}`);
+            console.log(`挑战者模式获得特殊骰子: ${getDiceName(rewardDiceType)}, 最大拥有数量: ${maxOwnedDiceOfType}, 当前拥有: ${ownedDiceOfType}`);
 
-            content += `\n恭喜！你战胜了${challengerMode.challenger.name}，获得了特殊骰子：${getDiceName(rewardDiceType)}！\n`;
+            content += `\n恭喜！你战胜了${challengerMode.challenger.name}，获得了他的特殊骰子：${getDiceName(rewardDiceType)}！`;
+            // 添加当前格罗申余额信息
+            content += `\n你当前拥有${playerWithNewDice.groschen}格罗申。`;
           } else {
             // 即使没有获得新骰子，也要更新玩家状态以确保格罗申奖励生效，但不改变游戏阶段和分数
             setGameState(prevState => ({
@@ -1481,7 +1496,10 @@ const Game: React.FC = () => {
               ]
             }));
             
-            content += `\n恭喜！你战胜了${challengerMode.challenger.name}！\n`;
+            console.log(`挑战者模式无法获得特殊骰子: ${getDiceName(rewardDiceType)}, 已达到最大拥有数量 ${maxOwnedDiceOfType}`);
+            content += `\n恭喜！你战胜了${challengerMode.challenger.name}！`;
+            // 添加当前格罗申余额信息
+            content += `\n你当前拥有${updatedPlayer.groschen}格罗申。`;
           }
         } else {
           // 即使没有获得骰子奖励，也要更新玩家状态以确保格罗申奖励生效，但不改变游戏阶段和分数
@@ -1496,11 +1514,15 @@ const Game: React.FC = () => {
             ]
           }));
           
-          content += `\n恭喜！你战胜了${challengerMode.challenger.name}！\n`;
+          content += `\n恭喜！你战胜了${challengerMode.challenger.name}！`;
+          // 添加当前格罗申余额信息
+          content += `\n你当前拥有${updatedPlayer.groschen}格罗申。`;
         }
       } else {
         content += `${challengerMode.challenger.name}获胜，再接再厉！\n`;
         content += `你失去了${challengerMode.betAmount}格罗申。`;
+        // 添加当前格罗申余额信息
+        content += `\n你当前拥有${gameState.players[0].groschen}格罗申。`;
       }
     }
     
