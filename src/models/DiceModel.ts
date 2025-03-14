@@ -241,12 +241,12 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     backgroundColor: '#e74c3c',
     textColor: '#000000',
     probabilities: {
-      1: 0.207,
-      2: 0.127,
-      3: 0.207,
-      4: 0.127,
-      5: 0.207,
-      6: 0.127
+      1: 0.217,
+      2: 0.117,
+      3: 0.217,
+      4: 0.117,
+      5: 0.217,
+      6: 0.117
     }
   },
   [DiceType.HEAVEN]: {
@@ -259,7 +259,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     dropRate: 0.0004, // 0.04%几率获得
     maxOwned: 4,
     backgroundColor: '#000000',
-    textColor: '#F2F2F2',
+    textColor: '#ffffff',
     probabilities: {
       1: 0.368,
       2: 0.105,

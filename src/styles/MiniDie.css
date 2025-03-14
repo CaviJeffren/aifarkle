@@ -17,6 +17,9 @@
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .mini-dot {
@@ -27,7 +30,7 @@
   border-radius: 50%;
 }
 
-/* 点数位置 */
+/* 点数位置 - 调整为更均匀的分布 */
 .mini-dot.center {
   top: 50%;
   left: 50%;
@@ -35,35 +38,35 @@
 }
 
 .mini-dot.top-left {
-  top: 20%;
-  left: 20%;
+  top: 22%;
+  left: 22%;
 }
 
 .mini-dot.top-right {
-  top: 20%;
-  right: 20%;
+  top: 22%;
+  right: 22%;
 }
 
 .mini-dot.middle-left {
   top: 50%;
-  left: 20%;
+  left: 22%;
   transform: translateY(-50%);
 }
 
 .mini-dot.middle-right {
   top: 50%;
-  right: 20%;
+  right: 22%;
   transform: translateY(-50%);
 }
 
 .mini-dot.bottom-left {
-  bottom: 20%;
-  left: 20%;
+  bottom: 22%;
+  left: 22%;
 }
 
 .mini-dot.bottom-right {
-  bottom: 20%;
-  right: 20%;
+  bottom: 22%;
+  right: 22%;
 }
 
 /* 响应式设计 */
