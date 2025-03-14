@@ -358,14 +358,6 @@ const Game: React.FC = () => {
   
   // 开始新游戏
   const handleStartGame = () => {
-    // 重置挑战者模式
-    setChallengerMode({
-      isActive: false,
-      challenger: null,
-      challengerDiceConfig: [],
-      challengerTargetScore: 0
-    });
-    
     setShowGameScreen(true);
     setGameState(prevState => {
       const newState = {
@@ -852,14 +844,6 @@ const Game: React.FC = () => {
     console.log('下注前格罗申:', gameState.players[0].groschen);
     console.log('下注金额:', amount);
     
-    // 重置挑战者模式
-    setChallengerMode({
-      isActive: false,
-      challenger: null,
-      challengerDiceConfig: [],
-      challengerTargetScore: 0
-    });
-    
     setGameState(prevState => {
       // 使用 GroschenService 减少格罗申
       const updatedPlayer = GroschenService.reduceGroschen(
@@ -968,6 +952,14 @@ const Game: React.FC = () => {
       );
       
       return newState;
+    });
+    
+    // 重置挑战者模式
+    setChallengerMode({
+      isActive: false,
+      challenger: null,
+      challengerDiceConfig: [],
+      challengerTargetScore: 0
     });
   };
 
@@ -1206,7 +1198,7 @@ const Game: React.FC = () => {
         type: challengerMode.challengerDiceConfig[index]
       }));
     } else {
-      // 否则使用玩家的骰子配置，确保电脑始终使用普通骰子
+      // 否则使用玩家的骰子配置
       return Array(6).fill(null).map((_, index) => ({
         id: Math.random(),
         value: rollDie(gameState.currentPlayerIndex === 0 ? gameState.diceConfigs.diceConfigs[index] : DiceType.NORMAL),
