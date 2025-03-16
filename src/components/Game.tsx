@@ -684,19 +684,11 @@ const Game: React.FC = () => {
               const maxOwned = getDiceMaxOwned(rewardDiceType);
               
               if (ownedCount < maxOwned) {
-                // 玩家获得了特殊骰子
-                newPlayers[0] = {
-                  ...newPlayers[0],
-                  ownedDice: [...newPlayers[0].ownedDice, rewardDiceType]
-                };
-                
-                // 立即保存玩家的骰子数据到本地存储
-                updateUserOwnedDice(newPlayers[0].ownedDice);
-                
-                // 先设置奖励骰子状态，确保在游戏结束弹窗关闭时能够显示特殊骰子奖励弹窗
+                // 只设置奖励骰子状态，不立即添加到玩家拥有列表
+                // 实际添加操作将在handleCloseRewardModal中进行
                 setRewardDice(rewardDiceType);
                 
-                console.log(`普通模式获得特殊骰子: ${getDiceName(rewardDiceType)}`);
+                console.log(`普通模式获得特殊骰子奖励: ${getDiceName(rewardDiceType)}, 将在确认后添加`);
               }
             }
           }
@@ -997,14 +989,18 @@ const Game: React.FC = () => {
   // 处理关闭恭喜获得特殊骰子弹窗
   const handleCloseRewardModal = () => {
     // 在关闭弹窗前，确保特殊骰子已经被添加到玩家的拥有骰子列表中
+    // 注意：特殊骰子只在这里添加，而不是在游戏结束时添加
+    // 这样可以避免重复添加特殊骰子的bug
     if (rewardDice) {
       // 更新玩家拥有的骰子
       setGameState(prevState => {
-        // 检查玩家是否已经拥有这个骰子（可能在之前的逻辑中已经添加）
-        const alreadyOwned = prevState.players[0].ownedDice.includes(rewardDice);
+        // 检查玩家是否已经达到该骰子的最大拥有数量
+        const ownedCount = prevState.players[0].ownedDice.filter(type => type === rewardDice).length;
+        const maxOwned = getDiceMaxOwned(rewardDice);
         
-        if (!alreadyOwned) {
-          // 如果还没有添加，则添加到玩家的骰子列表中
+        // 只有在没有达到最大拥有数量时才添加新骰子
+        if (ownedCount < maxOwned) {
+          // 添加到玩家的骰子列表中
           const newOwnedDice = [...prevState.players[0].ownedDice, rewardDice];
           
           // 使用GroschenService更新玩家拥有的骰子
@@ -1015,7 +1011,7 @@ const Game: React.FC = () => {
             `获得${getDiceName(rewardDice)}骰子`
           );
           
-          console.log(`保存特殊骰子奖励: ${getDiceName(rewardDice)}`);
+          console.log(`保存特殊骰子奖励: ${getDiceName(rewardDice)}, 当前拥有: ${ownedCount + 1}, 最大拥有数量: ${maxOwned}`);
           
           // 确保骰子数据被保存到本地存储
           updateUserOwnedDice(newOwnedDice);
@@ -1027,6 +1023,8 @@ const Game: React.FC = () => {
               ...prevState.players.slice(1)
             ]
           };
+        } else {
+          console.log(`无法获得更多${getDiceName(rewardDice)}骰子，已达到最大拥有数量: ${maxOwned}`);
         }
         
         return prevState;
@@ -1449,40 +1447,15 @@ const Game: React.FC = () => {
           const ownedDiceOfType = player.ownedDice.filter(d => d === rewardDiceType).length;
           
           if (ownedDiceOfType < maxOwnedDiceOfType) {
-            // 添加特殊骰子到玩家拥有的骰子中
-            const newOwnedDice = [...player.ownedDice, rewardDiceType];
-            
-            // 更新玩家拥有的骰子
-            const playerWithNewDice = GroschenService.updateOwnedDice(
-              updatedPlayer,
-              gameState.diceConfigs,
-              newOwnedDice,
-              `获得${getDiceName(rewardDiceType)}骰子`
-            );
-            
-            // 先设置奖励骰子状态，确保在游戏结束弹窗关闭时能够显示特殊骰子奖励弹窗
+            // 只设置奖励骰子状态，不立即添加到玩家拥有列表
+            // 实际添加操作将在handleCloseRewardModal中进行
             setRewardDice(rewardDiceType);
             
-            // 确保骰子数据被保存到本地存储
-            updateUserOwnedDice(newOwnedDice);
-            
-            // 更新玩家状态，但不改变游戏阶段和分数
-            setGameState(prevState => ({
-              ...prevState,
-              players: [
-                {
-                  ...playerWithNewDice,
-                  score: prevState.players[0].score // 保持原有分数不变
-                },
-                ...prevState.players.slice(1)
-              ]
-            }));
-            
-            console.log(`挑战者模式获得特殊骰子: ${getDiceName(rewardDiceType)}, 最大拥有数量: ${maxOwnedDiceOfType}, 当前拥有: ${ownedDiceOfType}`);
+            console.log(`挑战者模式获得特殊骰子奖励: ${getDiceName(rewardDiceType)}, 将在确认后添加`);
 
             content += `\n并获得了他的特殊骰子：${getDiceName(rewardDiceType)}！`;
             // 添加当前格罗申余额信息
-            content += `\n你当前拥有${playerWithNewDice.groschen}格罗申。`;
+            content += `\n你当前拥有${updatedPlayer.groschen}格罗申。`;
           } else {
             // 即使没有获得新骰子，也要更新玩家状态以确保格罗申奖励生效，但不改变游戏阶段和分数
             setGameState(prevState => ({

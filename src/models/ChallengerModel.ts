@@ -49,8 +49,8 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
       DiceType.DEMON_FA
     ],
     targetScore: 4000,
-    rewardDice: [DiceType.ANGEL_AN, DiceType.ANGEL_JI, DiceType.ANGEL_LA],
-    rewardProbability: 0.2, // 20%概率获得
+    rewardDice: [DiceType.ANGEL_AN, DiceType.ANGEL_JI, DiceType.ANGEL_LA,DiceType.DEMON_LU,DiceType.DEMON_XI,DiceType.DEMON_FA],
+    rewardProbability: 0.20, // 20%概率获得
     betAmount: 50 // 下注金额
   },
   'dance-boss': {
@@ -122,7 +122,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 6000,
     rewardDice: [DiceType.MINI],
-    rewardProbability: 0.2, // 20%概率获得
+    rewardProbability: 1, // 100%概率获得
     betAmount: 100 // 下注金额
   },
   'merchant': {
@@ -160,6 +160,24 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     rewardDice: [DiceType.CAVI_C],
     rewardProbability: 0.6, // 60%概率获得
     betAmount: 30 // 下注金额
+  },
+  'enhance-a-san': {
+    id: 'enhance-a-san',
+    name: '加强版的阿三',
+    description: '他还是那么喜欢三',
+    difficulty: 'medium',
+    diceTypes: [
+      DiceType.ANTIOCH,
+      DiceType.ANTIOCH,
+      DiceType.ANTIOCH,
+      DiceType.TRIPLE_THREE,
+      DiceType.TRIPLE_THREE,
+      DiceType.TRIPLE_THREE
+    ],
+    targetScore: 6000,
+    rewardDice: [DiceType.ANTIOCH,DiceType.TRIPLE_THREE],
+    rewardProbability: 0.33, // 33%概率获得
+    betAmount: 33 // 下注金额
   },
   'heaven-knight': {
     id: 'heaven-knight',

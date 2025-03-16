@@ -269,6 +269,66 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
       6: 0.211
     }
   },
+  [DiceType.ANGEL_AN]: {
+    type: DiceType.ANGEL_AN,
+    name: '安骰子',
+    description: '天使三骰之"安"，容易出6',
+    price: 111,
+    canBeSold: true,
+    canBePurchased: false,
+    dropRate: 0.01, // 1%几率获得
+    maxOwned: 1,
+    backgroundColor: '#e6f7ff', // 浅蓝色背景
+    textColor: '#0066cc', // 深蓝色文字
+    probabilities: {
+      1: 0.13,
+      2: 0.13,
+      3: 0.13,
+      4: 0.13,
+      5: 0.214,
+      6: 0.266
+    }
+  },
+  [DiceType.ANGEL_JI]: {
+    type: DiceType.ANGEL_JI,
+    name: '吉骰子',
+    description: '天使三骰之"吉"，容易出6',
+    price: 222,
+    canBeSold: true,
+    canBePurchased: false,
+    dropRate: 0.02, // 2%几率获得
+    maxOwned: 1,
+    backgroundColor: '#fff1e6', // 浅橙色背景
+    textColor: '#cc6600', // 深橙色文字
+    probabilities: {
+      1: 0.13,
+      2: 0.13,
+      3: 0.13,
+      4: 0.13,
+      5: 0.214,
+      6: 0.266
+    }
+  },
+  [DiceType.ANGEL_LA]: {
+    type: DiceType.ANGEL_LA,
+    name: '拉骰子',
+    description: '天使三骰之"拉"，容易出6',
+    price: 333,
+    canBeSold: true,
+    canBePurchased: false,
+    dropRate: 0.03, // 3%几率获得
+    maxOwned: 1,
+    backgroundColor: '#f0e6ff', // 浅紫色背景
+    textColor: '#6600cc', // 深紫色文字
+    probabilities: {
+      1: 0.13,
+      2: 0.13,
+      3: 0.13,
+      4: 0.13,
+      5: 0.214,
+      6: 0.266
+    }
+  },
   [DiceType.DEMON_LU]: {
     type: DiceType.DEMON_LU,
     name: '卢骰子',
@@ -509,66 +569,6 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
       6: 0.111
     }
   },
-  [DiceType.ANGEL_AN]: {
-    type: DiceType.ANGEL_AN,
-    name: '安骰子',
-    description: '天使三骰之"安"，容易出6',
-    price: 111,
-    canBeSold: true,
-    canBePurchased: false,
-    dropRate: 0.01, // 1%几率获得
-    maxOwned: 1,
-    backgroundColor: '#e6f7ff', // 浅蓝色背景
-    textColor: '#0066cc', // 深蓝色文字
-    probabilities: {
-      1: 0.13,
-      2: 0.13,
-      3: 0.13,
-      4: 0.13,
-      5: 0.214,
-      6: 0.266
-    }
-  },
-  [DiceType.ANGEL_JI]: {
-    type: DiceType.ANGEL_JI,
-    name: '吉骰子',
-    description: '天使三骰之"吉"，容易出6',
-    price: 222,
-    canBeSold: true,
-    canBePurchased: false,
-    dropRate: 0.02, // 2%几率获得
-    maxOwned: 1,
-    backgroundColor: '#fff1e6', // 浅橙色背景
-    textColor: '#cc6600', // 深橙色文字
-    probabilities: {
-      1: 0.13,
-      2: 0.13,
-      3: 0.13,
-      4: 0.13,
-      5: 0.214,
-      6: 0.266
-    }
-  },
-  [DiceType.ANGEL_LA]: {
-    type: DiceType.ANGEL_LA,
-    name: '拉骰子',
-    description: '天使三骰之"拉"，容易出6',
-    price: 333,
-    canBeSold: true,
-    canBePurchased: false,
-    dropRate: 0.03, // 3%几率获得
-    maxOwned: 1,
-    backgroundColor: '#f0e6ff', // 浅紫色背景
-    textColor: '#6600cc', // 深紫色文字
-    probabilities: {
-      1: 0.13,
-      2: 0.13,
-      3: 0.13,
-      4: 0.13,
-      5: 0.214,
-      6: 0.266
-    }
-  },
   [DiceType.ANTIOCH]: {
     type: DiceType.ANTIOCH,
     name: '圣安提阿克斯的骰子',
@@ -578,8 +578,8 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBePurchased: true,
     dropRate: 0.03, // 3%几率获得
     maxOwned: 3,
-    backgroundColor: '#9b59b6',
-    textColor: '#000000',
+    backgroundColor: '#9A582D',
+    textColor: '#683C28',
     probabilities: {
       1: 0,
       2: 0,
