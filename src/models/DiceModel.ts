@@ -27,7 +27,8 @@ export enum DiceType {
   ANGEL_JI = 'ANGEL_JI',
   ANGEL_LA = 'ANGEL_LA',
   ANTIOCH = 'ANTIOCH',
-  LOADED = 'LOADED'
+  LOADED = 'LOADED',
+  KNIGHT = 'KNIGHT'
 }
 
 // 骰子数据接口
@@ -257,7 +258,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: false,
     canBePurchased: false,
     dropRate: 0.0004, // 0.04%几率获得
-    maxOwned: 4,
+    maxOwned: 1,
     backgroundColor: '#000000',
     textColor: '#ffffff',
     probabilities: {
@@ -267,6 +268,26 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
       4: 0.105,
       5: 0.105,
       6: 0.211
+    }
+  },
+  [DiceType.KNIGHT]: {
+    type: DiceType.KNIGHT,
+    name: '骑士的骰子',
+    description: '象征着骑士的荣誉和忠贞',
+    price: 769,
+    canBeSold: true,
+    canBePurchased: false,
+    dropRate: 0.015, // 1.5%几率获得
+    maxOwned: 6,
+    backgroundColor: '#F58CBA',
+    textColor: '#ffffff',
+    probabilities: {
+      1: 0.309,
+      2: 0.135,
+      3: 0.135,
+      4: 0.135,
+      5: 0.135,
+      6: 0.151
     }
   },
   [DiceType.ANGEL_AN]: {
@@ -437,7 +458,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: true,
     dropRate: 0.05, // 5%几率获得
-    maxOwned: 2,
+    maxOwned: 3,
     backgroundColor: '#95a5a6',
     textColor: '#000000',
     probabilities: {
@@ -512,7 +533,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   [DiceType.UNLUCKY]: {
     type: DiceType.UNLUCKY,
     name: '厄运骰子',
-    description: '最好不要用这玩意',
+    description: '大概率出中间的数字最好不要用这玩意',
     price: 555,
     canBeSold: true,
     canBePurchased: false,
@@ -571,7 +592,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
   },
   [DiceType.ANTIOCH]: {
     type: DiceType.ANTIOCH,
-    name: '圣安提阿克斯的骰子',
+    name: '圣安的骰子',
     description: '好像6个面都是3，但也只有3个',
     price: 3333,
     canBeSold: true,

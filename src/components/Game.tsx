@@ -1004,6 +1004,7 @@ const Game: React.FC = () => {
           const newOwnedDice = [...prevState.players[0].ownedDice, rewardDice];
           
           // 使用GroschenService更新玩家拥有的骰子
+          // 注意：这里传入的是当前玩家状态，包括最新的格罗申数量
           const updatedPlayer = GroschenService.updateOwnedDice(
             prevState.players[0],
             prevState.diceConfigs,
@@ -1011,10 +1012,9 @@ const Game: React.FC = () => {
             `获得${getDiceName(rewardDice)}骰子`
           );
           
-          console.log(`保存特殊骰子奖励: ${getDiceName(rewardDice)}, 当前拥有: ${ownedCount + 1}, 最大拥有数量: ${maxOwned}`);
+          console.log(`保存特殊骰子奖励: ${getDiceName(rewardDice)}, 当前拥有: ${ownedCount + 1}, 最大拥有数量: ${maxOwned}, 格罗申: ${updatedPlayer.groschen}`);
           
-          // 确保骰子数据被保存到本地存储
-          updateUserOwnedDice(newOwnedDice);
+          // 不再单独调用updateUserOwnedDice，因为GroschenService.updateOwnedDice已经保存了完整的用户数据
           
           return {
             ...prevState,
@@ -1456,6 +1456,18 @@ const Game: React.FC = () => {
             content += `\n并获得了他的特殊骰子：${getDiceName(rewardDiceType)}！`;
             // 添加当前格罗申余额信息
             content += `\n你当前拥有${updatedPlayer.groschen}格罗申。`;
+            
+            // 更新玩家状态，确保格罗申奖励生效，但不改变游戏阶段和分数
+            setGameState(prevState => ({
+              ...prevState,
+              players: [
+                {
+                  ...updatedPlayer,
+                  score: prevState.players[0].score // 保持原有分数不变
+                },
+                ...prevState.players.slice(1)
+              ]
+            }));
           } else {
             // 即使没有获得新骰子，也要更新玩家状态以确保格罗申奖励生效，但不改变游戏阶段和分数
             setGameState(prevState => ({

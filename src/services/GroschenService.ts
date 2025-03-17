@@ -129,7 +129,7 @@ export class GroschenService {
       ownedDice: ownedDice
     };
 
-    console.log(`骰子更新 (${reason}), 当前拥有: ${ownedDice.length}个`);
+    console.log(`骰子更新 (${reason}), 当前拥有: ${ownedDice.length}个, 格罗申: ${updatedPlayer.groschen}`);
     
     // 保存数据，如果有游戏设置则一并保存
     saveUserData(updatedPlayer, diceConfigs, gameSettings);

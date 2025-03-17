@@ -110,7 +110,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
   'malcolm': {
     id: 'malcolm',
     name: '马尔科姆',
-    description: '只能说有点实力',
+    description: '只能说有点实力，但不多',
     difficulty: 'medium',
     diceTypes: [
       DiceType.MINI,
@@ -163,7 +163,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
   },
   'enhance-a-san': {
     id: 'enhance-a-san',
-    name: '加强版的阿三',
+    name: '加强版的阿三（new）',
     description: '他还是那么喜欢三',
     difficulty: 'medium',
     diceTypes: [
@@ -186,15 +186,15 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     difficulty: 'medium',
     diceTypes: [
       DiceType.HEAVEN,
-      DiceType.HEAVEN,
-      DiceType.HEAVEN,
-      DiceType.HEAVEN,
-      DiceType.HEAVEN,
-      DiceType.HEAVEN
+      DiceType.KNIGHT,
+      DiceType.KNIGHT,
+      DiceType.KNIGHT,
+      DiceType.KNIGHT,
+      DiceType.KNIGHT
     ],
     targetScore: 8000,
-    rewardDice: [DiceType.HEAVEN],
-    rewardProbability: 0.4, // 40%概率获得
+    rewardDice: [DiceType.HEAVEN,DiceType.KNIGHT],
+    rewardProbability: 0.3, // 40%概率获得
     betAmount: 200 // 下注金额
   },
   'alonso': {
@@ -212,7 +212,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 8000,
     rewardDice: [DiceType.ADULT],
-    rewardProbability: 0.1, // 10%概率获得
+    rewardProbability: 0.2, // 10%概率获得
     betAmount: 300 // 下注金额
   },
   'cavier': {
