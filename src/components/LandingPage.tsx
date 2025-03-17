@@ -156,6 +156,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
         onSave={handleSaveSettings}
         initialSettings={settings}
       />
+      
+      {/* 底部联系方式 */}
+      <Row className="justify-content-center mt-4">
+        <Col className="text-center">
+          <div className="footer-contact">
+            WeChat添加cavi06，一起进群吹水
+          </div>
+        </Col>
+      </Row>
     </Container>
   );
 };
