@@ -66,7 +66,7 @@ const GameControls: React.FC<GameControlsProps> = ({
                 onClick={onRoll}
                 disabled={!hasSelectedDice || !isSelectionValid}
               >
-                锁定并重掷
+                计分并重掷
               </Button>
               <Button 
                 variant="kcd" 
@@ -74,7 +74,7 @@ const GameControls: React.FC<GameControlsProps> = ({
                 onClick={onBank}
                 disabled={!hasSelectedDice || !isSelectionValid}
               >
-                锁定并结束回合
+                计分并结束回合
               </Button>
             </div>
           </div>

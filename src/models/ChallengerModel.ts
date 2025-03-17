@@ -50,7 +50,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 4000,
     rewardDice: [DiceType.ANGEL_AN, DiceType.ANGEL_JI, DiceType.ANGEL_LA,DiceType.DEMON_LU,DiceType.DEMON_XI,DiceType.DEMON_FA],
-    rewardProbability: 0.20, // 20%概率获得
+    rewardProbability: 0.3, // 30%概率获得
     betAmount: 50 // 下注金额
   },
   'dance-boss': {
@@ -68,7 +68,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 4000,
     rewardDice: [DiceType.CLOTHED],
-    rewardProbability: 0.3, // 30%概率获得
+    rewardProbability: 0.5, // 50%概率获得
     betAmount: 50 // 下注金额
   },
   'cheater': {
@@ -194,7 +194,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 8000,
     rewardDice: [DiceType.HEAVEN,DiceType.KNIGHT],
-    rewardProbability: 0.3, // 40%概率获得
+    rewardProbability: 0.3, // 30%概率获得
     betAmount: 200 // 下注金额
   },
   'alonso': {
@@ -212,7 +212,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 8000,
     rewardDice: [DiceType.ADULT],
-    rewardProbability: 0.2, // 10%概率获得
+    rewardProbability: 0.2, // 20%概率获得
     betAmount: 300 // 下注金额
   },
   'cavier': {
