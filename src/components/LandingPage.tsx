@@ -110,7 +110,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 className="kcd-button landing-button"
                 onClick={onOpenDiceSelector}
               >
-                选择骰子
+                骰子收藏
               </Button>
               
               <Button 

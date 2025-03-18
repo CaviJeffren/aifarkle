@@ -81,4 +81,47 @@
   .dice-type-desc {
     font-size: 0.7rem;
   }
+}
+
+/* 标签页样式 */
+.kcd-tabs {
+  border-bottom: 2px solid var(--kcd-wood-light);
+  margin-bottom: 20px;
+}
+
+.kcd-tabs .nav-link {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-main);
+  border: none;
+  padding: 10px 20px;
+  margin-right: 5px;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+}
+
+.kcd-tabs .nav-link:hover {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: var(--kcd-red);
+}
+
+.kcd-tabs .nav-link.active {
+  color: var(--kcd-red);
+  background-color: var(--kcd-parchment);
+  border-bottom: 3px solid var(--kcd-red);
+  font-weight: bold;
+}
+
+.kcd-tabs .nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: var(--kcd-red);
+  border-radius: 50%;
+  display: none; /* 默认不显示，可根据需要设置为block */
 } 

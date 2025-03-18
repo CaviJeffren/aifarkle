@@ -1,0 +1,356 @@
+.dice-collection {
+  padding: 5px;
+}
+
+/* 一级页面样式 */
+.dice-set-summary-card {
+  background-color: transparent;
+  border: 2px solid var(--kcd-wood-light);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dice-set-summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.05), transparent);
+  z-index: 0;
+}
+
+.dice-set-summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border-color: var(--kcd-red);
+}
+
+.dice-set-summary-card.completed {
+  border-color: var(--kcd-red);
+  box-shadow: 0 0 8px rgba(231, 76, 60, 0.2);
+}
+
+.dice-set-summary-card.completed::before {
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), transparent);
+}
+
+.dice-set-summary-content {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+.representative-dice {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--kcd-font-main);
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-right: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dice-set-info {
+  flex-grow: 1;
+}
+
+.dice-set-title {
+  color: var(--kcd-red);
+  font-family: var(--kcd-font-main);
+  font-size: 1rem;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.dice-set-progress-bar {
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--kcd-red);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.dice-set-progress-text {
+  font-size: 0.75rem;
+  color: var(--kcd-wood-dark);
+  text-align: right;
+}
+
+/* 二级页面样式 */
+.dice-set-detail {
+  padding: 10px;
+}
+
+.dice-set-detail-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.back-button {
+  color: var(--kcd-red);
+  padding: 0;
+  margin-right: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.back-button:hover {
+  color: var(--kcd-red);
+  background-color: rgba(231, 76, 60, 0.2);
+}
+
+.back-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.dice-set-detail-header h4 {
+  margin: 0;
+  color: var(--kcd-red);
+  font-family: var(--kcd-font-main);
+  flex-grow: 1;
+  text-align: center;
+}
+
+.dice-set-description {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  margin-bottom: 20px;
+}
+
+.dice-set-card {
+  background-color: var(--kcd-parchment);
+  border: 2px solid var(--kcd-wood-light);
+  transition: all 0.3s ease;
+}
+
+.dice-set-card.completed {
+  border-color: var(--kcd-red);
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+}
+
+.dice-set-card .card-title {
+  color: var(--kcd-red);
+  font-family: var(--kcd-font-main);
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.dice-set-card .card-text {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  margin-bottom: 15px;
+}
+
+.dice-set-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 15px;
+  justify-items: center;
+}
+
+.detail-dice-slot {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--kcd-font-main);
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.detail-dice-slot.selected {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+}
+
+.dice-slot {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--kcd-font-main);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.dice-slot.selected {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+}
+
+.dice-slot.owned,
+.detail-dice-slot.owned {
+  background-color: rgba(46, 204, 113, 0.2);
+  border-color: #2ecc71;
+  color: var(--kcd-wood-dark);
+}
+
+.probability-info {
+  margin-top: 15px;
+  padding: 15px;
+  border-top: 1px solid var(--kcd-wood-light);
+  border-radius: 4px;
+}
+
+.probability-info h6 {
+  color: var(--kcd-red);
+  font-family: var(--kcd-font-main);
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.probability-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, auto);
+  gap: 5px;
+}
+
+.probability-item {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 10px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+}
+
+.dice-max-owned {
+  margin-top: 8px;
+  text-align: center;
+  padding-top: 6px;
+  border-top: 1px dashed var(--kcd-wood-light);
+}
+
+.dice-max-owned p {
+  color: var(--kcd-red);
+  font-family: var(--kcd-font-secondary);
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.back-button-container {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.text-back-button {
+  color: var(--kcd-red);
+  font-family: var(--kcd-font-main);
+  text-decoration: none;
+  padding: 5px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.text-back-button:hover {
+  color: var(--kcd-red);
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.completion-status {
+  text-align: center;
+  padding-top: 6px;
+  border-top: 1px dashed var(--kcd-wood-light);
+}
+
+.complete-text {
+  color: var(--kcd-red);
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.incomplete-text {
+  color: var(--kcd-wood-dark);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.no-dice-sets-message {
+  padding: 30px 20px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 2px dashed var(--kcd-wood-light);
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.no-dice-sets-message p {
+  color: var(--kcd-wood-dark);
+  font-family: var(--kcd-font-secondary);
+  font-size: 1rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.dice-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.dice-name-label {
+  margin-top: 5px;
+  font-size: 0.7rem;
+  text-align: center;
+  max-width: 70px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--kcd-font-secondary);
+  height: 1.5em; /* 固定高度确保对齐 */
+}
+
+.dice-name-label.owned {
+  color: var(--kcd-wood-dark);
+}
+
+.dice-name-label.not-owned {
+  color: #999;
+  font-style: italic;
+} 

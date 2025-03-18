@@ -68,7 +68,7 @@ export const CHALLENGER_CONFIGS: { [key: string]: ChallengerDiceConfig } = {
     ],
     targetScore: 4000,
     rewardDice: [DiceType.CLOTHED],
-    rewardProbability: 0.5, // 50%概率获得
+    rewardProbability: 0.3, // 30%概率获得
     betAmount: 50 // 下注金额
   },
   'cheater': {
