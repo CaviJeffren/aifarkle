@@ -54,7 +54,7 @@ export const DICE_SETS: DiceSet[] = [
   {
     id: 'mini-set',
     name: '迷你组合',
-    description: '舞场老板喜欢使用的骰子组合',
+    description: '收集所有迷你骰子',
     dices: [
       DiceType.MINI,
       DiceType.MINI,

@@ -299,7 +299,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBePurchased: false,
     dropRate: 0.007, // 0.7%几率获得
     maxOwned: 3,
-    backgroundColor: '#2ecc71',
+    backgroundColor: '#90EE90',
     textColor: '#000000',
     probabilities: {
       1: 0.333,
@@ -498,7 +498,7 @@ export const DICE_DATA: { [key in DiceType]: DiceData } = {
     canBeSold: true,
     canBePurchased: false,
     dropRate: 0.01, // 1%几率获得
-    maxOwned: 2,
+    maxOwned: 1,
     backgroundColor: '#34495e',
     textColor: '#000000',
     probabilities: {
